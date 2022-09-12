@@ -52,3 +52,34 @@ S ->^{n} ... -> a^n S A^n -> a^n b Ta A^{n - 1} -> a^{n + 1} b TA a A^{n - 2} ->
 Изучить спецификацию синтаксиса вашего второго самого любимого языка, в отчете привести ссылку на документ, который вы изучали, и отметить 3 новые для вас особенности синтаксиса. 
 
 #### Решение
+
+GLSL — OpenGL Shading Language 😳💀
+
+1. [input- и output- блоки для аггрегации данных между различными построениями шейдеров](https://www.khronos.org/opengl/wiki/Interface_Block_(GLSL)#Input_and_output):
+```
+// Vertex Shader
+out VertexData
+{
+  vec3 color;
+  vec2 texCoord;
+} outData;
+
+// Geometry Shader
+in VertexData
+{
+  vec3 color;
+  vec2 texCoord;
+} inData[];
+```
+
+2. [Существование атомарного счётчика](https://www.khronos.org/opengl/wiki/Atomic_Counter)
+
+```
+atomic_uint
+```
+
+3. [Порядок квалификаторов](https://www.khronos.org/opengl/wiki/Type_Qualifier_(GLSL)#Qualifier_order)
+
+```
+invariant-qualifier interpolation-qualifier layout-qualifier other-storage-qualifier precision-qualifier
+```
