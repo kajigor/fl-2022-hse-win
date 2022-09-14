@@ -1,0 +1,199 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{cmap}					% поиск в PDF
+\usepackage{mathtext} 				% русские буквы в формулах
+\usepackage[T2A]{fontenc}			% кодировка
+\usepackage[utf8]{inputenc}			% кодировка исходного текста
+\usepackage[english,russian]{babel}	% локализация и переносы
+\usepackage{indentfirst}
+\frenchspacing
+\usepackage[linguistics]{forest}
+\usepackage[latin1]{inputenc}
+\usetikzlibrary{trees}
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools} % AMS
+\usepackage{icomma} % "Умная" запятая: 
+\DeclareMathOperator{\sgn}{\mathop{sgn}}
+\newcommand*{\hm}[1]{#1\nobreak\discretionary{}
+{\hbox{$\mathsurround=0pt #1$}}{}}
+\usepackage{graphicx}  % Для вставки рисунков
+\graphicspath{{images/}{images2/}}  % папки с картинками
+\setlength\fboxsep{3pt} % Отступ рамки \fbox{} от рисунка
+\setlength\fboxrule{1pt} % Толщина линий рамки \fbox{}
+\usepackage{wrapfig} % Обтекание рисунков текстом
+\usepackage{array,tabularx,tabulary,booktabs} % Дополнительная работа с таблицами
+\usepackage{longtable}  % Длинные таблицы
+\usepackage{multirow} % Слияние строк в таблице
+\usepackage{xcolor}
+\usepackage{hyperref}
+\definecolor{linkcolor}{HTML}{799B03} % цвет ссылок
+\definecolor{urlcolor}{HTML}{799B03} % цвет гиперссылок
+\hypersetup{pdfstartview=FitH,  linkcolor=linkcolor,urlcolor=urlcolor, colorlinks=true}
+\theoremstyle{plain} % Это стиль по умолчанию, его можно не переопределять.
+\newtheorem{theorem}{Теорема}[section]
+\newtheorem{proposition}[theorem]{Утверждение}
+\theoremstyle{definition} % "Определение"
+\newtheorem{corollary}{Следствие}[theorem]
+\newtheorem{problem}{Задача}[section]
+\theoremstyle{remark} % "Примечание"
+\newtheorem*{nonum}{Решение}
+\usepackage{etoolbox} % логические операторы
+\usepackage{extsizes} % Возможность сделать 14-й шрифт
+\usepackage{geometry} % Простой способ задавать поля
+	\geometry{top=25mm}
+	\geometry{bottom=35mm}
+	\geometry{left=35mm}
+	\geometry{right=20mm}
+\usepackage{setspace}
+\usepackage{lastpage} % Узнать, сколько всего страниц в документе.
+\usepackage{soul} % Модификаторы начертания
+\usepackage{hyperref}
+\usepackage[usenames,dvipsnames,svgnames,table,rgb]{xcolor}
+\hypersetup{				% Гиперссылки
+    unicode=true,           % русские буквы в раздела PDF
+    pdftitle={Заголовок},   % Заголовок
+    pdfauthor={Автор},      % Автор
+    pdfsubject={Тема},      % Тема
+    pdfcreator={Создатель}, % Создатель
+    pdfproducer={Производитель}, % Производитель
+    pdfkeywords={keyword1} {key2} {key3}, % Ключевые слова
+    colorlinks=true,       	% false: ссылки в рамках; true: цветные ссылки
+    linkcolor=red,          % внутренние ссылки
+    citecolor=black,        % на библиографию
+    filecolor=magenta,      % на файлы
+    urlcolor=cyan           % на URL
+}
+\usepackage{csquotes} % Еще инструменты для ссылок
+\usepackage{multicol} % Несколько колонок
+\usepackage{tikz} % Работа с графикой
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+
+\date{ВШЭ ПМИ, 2022 г.} 
+\author{Алексей Косенко}
+
+\begin{document}
+
+% Set the overall layout of the tree
+\tikzstyle{level 1}=[level distance=2.5cm, sibling distance=1cm]
+\tikzstyle{level 2}=[level distance=2.5cm, sibling distance=1cm]
+
+% Define styles for bags and leafs
+\tikzstyle{bag} = [text width=4em, text centered]
+\tikzstyle{end} = [circle, minimum width=3pt,fill, inner sep=0pt]
+
+\maketitle
+
+\section{Формальные языки, практика 1.}
+
+\subsection{Привести грамматику для языка палиндромов.}
+
+Язык палиндромов - $\{ w w^r | w \in \{0, 1\}* \}$. Это язык, в котором цепочки начинаются и заканчиваются одинаково. 
+
+$$G = \<\{\{0, 1\}, \{S\}, P, S\}\>$$
+
+Для цепочек четной длины в начало и в конец будем ставить одинаковые терминальные значения, то есть открывающую и закрывающую скобку сразу. 
+
+$$P: S \rightarrow 0S0 \ | \ 1S1 \ | \ \varepsilon$$
+
+Если нам нужна ещё цепочка нечётной длины, то добавим элемент из алфавит с пустым символом, иначе просто $\varepsilon$.
+
+$$P: S \rightarrow 0S0 \ | \ 1S1 \ | \ 1\varepsilon \ | \ 0\varepsilon \ | \ \varepsilon$$
+
+
+Приведем дерево вывода строки $01100110$ в нашей грамматике, длина которой равна $8$.
+
+\begin{tikzpicture}[grow=right]
+\node[bag] {S}
+    child {
+        node[bag] {0}        
+    }
+    child {
+        node[bag] {S}
+            child {
+                node[bag] {1}        
+            }
+            child {
+                node[bag] {S}
+                    child {
+                        node[bag] {1}        
+                    }
+                    child {
+                        node[bag] {S}
+                            child {
+                                node[bag] {0}        
+                            }
+                            child {
+                                node[bag] {S}
+                                    child {
+                                        node[bag] {$\varepsilon$}
+                                    }
+                            }
+                            child {
+                                node[bag] {0}        
+                            }
+                    }
+                    child {
+                        node[bag] {1}        
+                    }
+            }
+            child {
+                node[bag] {1}        
+            }
+    }
+    child {
+        node[bag] {0}        
+    };
+\end{tikzpicture}
+
+$$S \rightarrow 0S0 \rightarrow 01S10 \rightarrow 011S110 \rightarrow 0110S0110 \rightarrow 0110\varepsilon0110 \rightarrow 01100110$$
+$$$$
+
+\subsection{Описать язык, порождаемый грамматикой.}
+
+$$P: S \rightarrow aSA \ | \ aT$$ 
+$$TA \rightarrow bTa$$
+$$aA \rightarrow Aa$$
+$$T \rightarrow ba$$
+
+\begin{center}
+\begin{forest}
+\Tree[S  [aT [\textbf{aba}]] [aSA [aaTA [aabTa [\textbf{aabbaa}]]] [aaSAA [aaaSAAA [aaaaTAAA [aaaabTaAA [aaaabTAaA [aaaabbTaaA [aaaabbTaAa [aaaabbTAaa [aaaabbbTaaa [\textbf{aaaabbbbaaaa}]]]]]]]] [aaaaSAAAA [$\dots$]]][aaaTAA [aaabTaA [aaabTAa [aaabbTaa [\textbf{aaabbbaaa}]]]] ]]]]]
+
+\end{forest}
+\end{center}
+
+Итак, правила предложенной грамматики описывают цепочки формата: $a^nb^na^n$, где $n \in \mathbb{N}$. 
+
+\subsection{Отрывок из спецификации Python.}
+
+\href{https://docs.python.org/3/reference/index.html}{Вот ссылка на документ}.
+
+
+\begin{itemize}
+    \item В PEP 572 был введён оператор моржа (\textit{walrus operator}) - попытка разграничить оператор присваивания и тоже самое, но в контексте большого выражения. Он не только снижает сложность кода, но и улучшает его чтение. 
+
+    $$a = (1 + (n := 10))$$
+    $$print(a, n)$$
+
+    \item Типизация динамически типизированного языка была введена в PEP 483 с помощью стандартной библиотеки $typing$, другими словами - type hinting. Чем-то похоже на TypeScript, но без компилятора, а только с $mypy$. Есть даже доклады, где сравнивается а-ля типизация между JS и Python. Такой "хороший костыль" сделал код быстро читаемым из-за сохранения контекста типов и объектов.
+
+    a: int = 10
+
+    T = TypeVar("T") \# дженерики
+
+    def bar(a: T) $\rightarrow$ T: ...
+    
+    def foo(a: List[int, ...]) $\rightarrow$ Union[None, Tuple[People]]: ...
+
+    \item Распаковщик списков (\textit{последовательностей}) и словарей. Локаничность и точка.
+
+    a, *b, c = range(10)
+
+    def baz(..., *arg, **kwargs) $\rightarrow$ ... \ :
+    
+    [*array]; \
+    $\{**dict1, **dict2\}$; \
+    print(*array)
+
+    \item F-строки, ellipsis, mock-функции (\textit{pass}) и многое другое.
+\end{itemize}
+\end{document}
