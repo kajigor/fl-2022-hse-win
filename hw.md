@@ -5,6 +5,13 @@
 ![](formal-lang-hw2-1.png)
 
 
+![](formal-lang-hw2-2.2.png)
+
+
+![](automation.svg)
+
+
+
 ![](formal-lang-hw2-2.png)
 
 
