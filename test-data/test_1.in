@@ -1,0 +1,6 @@
+initial_not_terminal=[S]
+[S] -> %(% [a\%\]] %)% | [a]
+
+
+
+[A] -> [A] [A] | EPS
