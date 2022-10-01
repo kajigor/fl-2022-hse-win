@@ -1,0 +1,19 @@
+Contecst Free Grammar:
+Terminal characters are {')', '('}
+Non-terminal characters are {'s_1', 's', 's_0', 'r', 's_2', 'l'}
+Start non-terminal is <s_0>
+
+Rules:
+s_0 := <l><s_1> | EPS
+s := <l><s_1>
+s_1 := <s><s_2> | <r><s> | `)`
+s_2 := <r><s> | `)`
+l := `(`
+r := `)`
+
+
+raw:
+CFG(terminals={')', '('}, non_terminals={'s_1', 's', 's_0', 'r', 's_2', 'l'}, start='s_0', rules=[Binding(name='s_0', expr=Alt(vals=[Cons(vals=[NonTerminal(value='l'), NonTerminal(value='s_1')]), Eps()])), Binding(name='s', expr=Cons(vals=[NonTerminal(value='l'), NonTerminal(value='s_1')])), Binding(name='s_1', expr=Alt(vals=[Cons(vals=[NonTerminal(value='s'), NonTerminal(value='s_2')]), Cons(vals=[NonTerminal(value='r'), NonTerminal(value='s')]), Terminal(value=')')])), Binding(name='s_2', expr=Alt(vals=[Cons(vals=[NonTerminal(value='r'), NonTerminal(value='s')]), Terminal(value=')')])), Binding(name='l', expr=Terminal(value='(')), Binding(name='r', expr=Terminal(value=')'))])
+
+This grammar is in chomsky normal form
+

@@ -1,0 +1,14 @@
+Contecst Free Grammar:
+Terminal characters are {'(', ')'}
+Non-terminal characters are {'S'}
+Start non-terminal is <S>
+
+Rules:
+S := `(`<S>`)` | EPS
+
+
+raw:
+CFG(terminals={'(', ')'}, non_terminals={'S'}, start='S', rules=[Binding(name='S', expr=Alt(vals=[Cons(vals=[Terminal(value='('), NonTerminal(value='S'), Terminal(value=')')]), Eps()]))])
+
+This grammar is not in chomsky normal form
+

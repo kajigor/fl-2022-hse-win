@@ -1,0 +1,8 @@
+LexToken(START,'more>',1,0)
+LexToken(NON_TERMINAL,'more>',2,15)
+LexToken(BINDING,':=',2,24)
+LexToken(NON_TERMINAL,'more\\',2,27)
+LexToken(SEP,';',2,35)
+LexToken(NON_TERMINAL,'more\\',3,37)
+LexToken(BINDING,':=',3,46)
+LexToken(TERMINAL,'>',3,49)

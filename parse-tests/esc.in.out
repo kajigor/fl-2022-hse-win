@@ -1,0 +1,15 @@
+Context Free Grammar:
+Terminal characters are {'>'}
+Non-terminal characters are {'more\\', 'more>'}
+Start non-terminal is <more>>
+
+Rules:
+more> := <more\>
+more\ := `>`
+
+
+raw:
+CFG(terminals={'>'}, non_terminals={'more\\', 'more>'}, start='more>', rules=[Binding(name='more>', expr=NonTerminal(value='more\\')), Binding(name='more\\', expr=Terminal(value='>'))])
+
+This grammar is not in chomsky normal form
+
