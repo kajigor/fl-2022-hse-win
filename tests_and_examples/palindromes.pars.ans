@@ -1,0 +1,9 @@
+Terminals:
+	a
+	b
+	c
+Non terminals:
+	S
+Starting non terminal: S
+Rules:
+	S → ε | aSa | bSb | cSc | a | b | c
