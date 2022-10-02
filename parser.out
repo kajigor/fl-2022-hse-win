@@ -1,0 +1,89 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> token
+Rule 1     token -> TERM
+Rule 2     token -> NONTERM
+Rule 3     token -> EPS
+Rule 4     token -> START SEPARATOR
+Rule 5     mult_tokens -> token
+Rule 6     mult_tokens -> mult_tokens token
+Rule 7     expr -> START SEPARATOR
+Rule 8     expr -> rule SEPARATOR
+Rule 9     rule -> mult_tokens TO mult_tokens
+
+Terminals, with rules where they appear
+
+EPS                  : 3
+NONTERM              : 2
+SEPARATOR            : 4 7 8
+START                : 4 7
+TERM                 : 1
+TO                   : 9
+error                : 
+
+Nonterminals, with rules where they appear
+
+expr                 : 
+mult_tokens          : 6 9 9
+rule                 : 8
+token                : 5 6 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . token
+    (1) token -> . TERM
+    (2) token -> . NONTERM
+    (3) token -> . EPS
+    (4) token -> . START SEPARATOR
+
+    TERM            shift and go to state 2
+    NONTERM         shift and go to state 3
+    EPS             shift and go to state 4
+    START           shift and go to state 5
+
+    token                          shift and go to state 1
+
+state 1
+
+    (0) S' -> token .
+
+
+
+state 2
+
+    (1) token -> TERM .
+
+    $end            reduce using rule 1 (token -> TERM .)
+
+
+state 3
+
+    (2) token -> NONTERM .
+
+    $end            reduce using rule 2 (token -> NONTERM .)
+
+
+state 4
+
+    (3) token -> EPS .
+
+    $end            reduce using rule 3 (token -> EPS .)
+
+
+state 5
+
+    (4) token -> START . SEPARATOR
+
+    SEPARATOR       shift and go to state 6
+
+
+state 6
+
+    (4) token -> START SEPARATOR .
+
+    $end            reduce using rule 4 (token -> START SEPARATOR .)
+

@@ -1,125 +1,135 @@
 import ply.yacc as yacc
 
 from lex import tokens
+import sys
+import os
+import os.path
 
-precedence = (
-  ('left', 'PLUS', 'MINUS'),
-  ('left', 'MULT', 'DIV'),
-  ('right', 'POW')
-)
+# token : TERM
+#       | NONTERM
+#       | EPS
+# mult_tokens : token
+#             | mult_tokens token
+# expr : START SEPARATOR
+#      | rule SEPARATOR 
+# rule : mult_tokens TO mult_tokens
 
-# Dangling-else problem
-# if 0 then (if 1 then 777) else 9
-# if : IF expr THEN if ELSE if
-#    | IF expr THEN if
-#    | expr
-# expr : expr + expr
-#      | expr - expr
-#      | expr * expr
-#      | expr / expr
-#      | NUM
-#      | LBR expr RBR
+class Grammar:
+    terminals = set()
+    nonterminals = set()
+    rules = set()
+    start = ""
+    
+    def clear(self):
+        self.terminals.clear()
+        self.nonterminals.clear()
+        self.rules.clear()
+        self.start = ""
 
-def p_if(p):
-  '''if : IF expr THEN LBR if RBR ELSE LBR if RBR
-        | IF expr THEN LBR if RBR
-        | expr
-  '''
-  if len(p) == 11:
-    p[0] = p[5] if p[2] == 0 else p[9]
-  else:
-    if len(p) == 7:
-      p[0] = p[5] if p[2] == 0 else 9999999999999
-    else:
-      p[0] = p[1]
+    def get(self):
+        res = ""
+        res += "Start: \n"
+        res += self.start + '\n'
+        res += "NonTerminals: \n"
+        for nonterm in self.nonterminals:
+            res += nonterm + '\n'
+        res += "Terminals: \n"
+        for term in self.terminals:
+            res += term + '\n'
+        res += "Rules: \n"
+        for rule in self.rules:
+            res += str(rule[0]) + " to " + str(rule[1])
+        return res
 
-def p_expr_plus(p):
-  'expr : expr PLUS expr'
-  p[0] = p[1] + p[3]
 
-def p_expr_minus(p):
-  'expr : expr MINUS expr'
-  p[0] = p[1] - p[3]
+grammar = Grammar()
 
-def p_expr_mult(p):
-  'expr : expr MULT expr'
-  p[0] = p[1] * p[3]
+def p_token_term(p):
+    'token : TERM'
+    p[0] = p[1]
+    grammar.terminals.add(p[0])
 
-def p_expr_div(p):
-  'expr : expr DIV expr'
-  p[0] = p[1] / p[3]
 
-def p_expr_pow(p):
-  'expr : expr POW expr'
-  p[0] = p[1] ** p[3]
+def p_token_NONTERM(p):
+    'token : NONTERM'
+    p[0] = p[1]
+    grammar.nonterminals.add(p[0])
 
-def p_expr_num(p):
-  'expr : NUM'
-  p[0] = p[1]
 
-def p_expr_br(p):
-  'expr : LBR expr RBR'
-  p[0] = p[2]
+def p_token_eps(p):
+    'token : EPS'
+    p[0] = p[1]
+
+
+def p_token_start(p):
+    'token : START SEPARATOR'
+    p[0] = p[1]
+    if grammar.start != "":
+        print("error: ambiguous start")
+    grammar.start = p[0]
+
+
+def p_mtokens_token(p):
+    'mult_tokens : token'
+    p[0] = list(p[1])
+
+
+def p_mtokens_mtokens_token(p):
+    'mult_tokens : mult_tokens token'
+    p[0] = p[1] + list(p[2])
+
+
+def p_expr_start(p):
+    'expr : START SEPARATOR'
+    p[0] = p[1]
+    print(1)
+
+
+def p_expr_rule(p):
+    'expr : rule SEPARATOR'
+    p[0] = p[1]
+    print(1)
+
+
+def p_rule(p):
+    'rule : mult_tokens TO mult_tokens'
+    p[0] = (p[1], p[3])
+    grammar.rules.add(p[0])
 
 def p_error(p):
   if p == None:
-    token = "end of file"
-    parser.errok()
+    print("Unexpected EOF")
   else:
     token = f"{p.type}({p.value}) on line {p.lineno}"
 
   print(f"Syntax error: Unexpected {token}")
 
-def main():
-  parser = yacc.yacc()
+parser = yacc.yacc()
 
-  while True:
-    try:
-      s = input("calc> ")
-    except EOFError:
-      break
-    if not s:
-      continue
-    result=parser.parse(s)
-    print(result)
+def run_parser(input, output):
+    for line in input.readlines():
+        parser.parse(line)
+    output.write(grammar.get())
+    grammar.clear()
+
+def run_tests():
+    tests = os.listdir(os.path.join(os.getcwd(), 'examples'))
+    for test in tests:
+        if '.out' in test:
+            continue
+        input = os.path.join(os.getcwd(), 'examples', test)
+        output = os.path.splitext(input)[0] + '_parse.out'
+        with open(input, "r") as fin:
+            with open(output, "w") as fout:
+                run_parser(fin, fout)
+        
+
+def main():
+    run_tests()
+    for i in range(1, len(sys.argv)):
+        with open(sys.argv[i], "r") as input:
+            with open(sys.argv[i] + '.out', "w") as output:
+                run_parser(input, output)
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-# def p_expr_plus(p):
-#   'expr : expr PLUS term'
-#   p[0] = p[1] + p[3]
-
-# def p_expr_minus(p):
-#   'expr : expr MINUS term'
-#   p[0] = p[1] - p[3]
-
-# def p_expr_term(p):
-#   'expr : term'
-#   p[0] = p[1]
-
-# def p_term_mult(p):
-#   'term : term MULT factor'
-#   p[0] = p[1] * p[3]
-
-# def p_term_div(p):
-#   'term : term DIV factor'
-#   p[0] = p[1] / p[3]
-
-# def p_term_factor(p):
-#   'term : factor'
-#   p[0] = p[1]
-
-# def p_factor_num(p):
-#   'factor : NUM'
-#   p[0] = p[1]
-
-# def p_factor_br(p):
-#   'factor : LBR expr RBR'
-#   p[0] = p[2]
-
-
