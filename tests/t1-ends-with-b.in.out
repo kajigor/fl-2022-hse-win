@@ -1,0 +1,2 @@
+LexToken(TERM,'$start$',1,0)
+LexToken(BIND,'=',1,8)
