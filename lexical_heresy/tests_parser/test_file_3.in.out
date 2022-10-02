@@ -1,0 +1,8 @@
+Context Free Grammar: Analysis completed
+List of terminal characters: {'T_"a"b"o"b"a_and_\\-backslash"_incident'}
+List of non-terminal characters: {'NT_//-2slash', 'NT_\\/\\/-the_big_W', 'S'}
+Start non-terminal character: S
+Rules:
+NT_//-2slash = /NT_\/\/-the_big_W/;
+NT_\/\/-the_big_W = "T_"a"b"o"b"a_and_\-backslash"_incident";
+S = /NT_//-2slash/;

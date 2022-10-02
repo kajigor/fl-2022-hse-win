@@ -1,0 +1,8 @@
+Context Free Grammar: Analysis completed
+List of terminal characters: {'o', 'ba'}
+List of non-terminal characters: {'A', 'S', 'B'}
+Start non-terminal character: S
+Rules:
+A = /B/"o";
+S = /A/;
+B = "ba";

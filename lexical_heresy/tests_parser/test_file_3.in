@@ -1,0 +1,5 @@
+start = /S/;
+/S/ = /NT_\/\/-2slash/;
+/NT_\/\/-2slash/ = /NT_\\\/\\\/-the_big_W/;
+/NT_\\\/\\\/-the_big_W/ = "T_\"a\"b\"o\"b\"a_and_\\-backslash\"_incident";
+

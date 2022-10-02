@@ -1,0 +1,8 @@
+Context Free Grammar: Analysis completed
+List of terminal characters: {'-', '0', '1'}
+List of non-terminal characters: {'aboba', 'N', 'S', 'A'}
+Start non-terminal character: S
+Rules:
+N = "1"/A/;
+S = "0" | /N/ | "-"/N/;
+A = "1"/A/ | "0"/A/ | eps | /aboba/;
