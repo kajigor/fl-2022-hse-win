@@ -12,7 +12,8 @@ t_RULE = r'\->'
 t_START = r'=>'
 
 escapes = {'\@': '@',
-           '\&': '&'}
+           '\&': '&',
+           '\\\\': '\\'}
 
 def clear_escapes(line):
   for char in escapes:
