@@ -1,0 +1,8 @@
+LexToken(START,'START',1,0)
+LexToken(NONTERMINAL,'START',2,14)
+LexToken(EQ,'=',2,21)
+LexToken(TERMINAL,'(',2,23)
+LexToken(NONTERMINAL,'START',2,26)
+LexToken(TERMINAL,')',2,33)
+LexToken(PIPE,'|',2,37)
+LexToken(EMPTY,'EPS',2,39)

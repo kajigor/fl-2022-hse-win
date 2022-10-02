@@ -29,14 +29,9 @@ def t_START(t):
     return t
 
 
-def t_EMPTY(t):
-    r'empty=\[.*\]'
-    t.value = t.value[7:-1]
-    return t
-
-
 t_EQ = r'='
 t_PIPE = r'\|'
+t_EMPTY = r'EPS'
 
 t_ignore = ' \t'
 

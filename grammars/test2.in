@@ -1,0 +1,4 @@
+start=[EXPR]
+[EXPR] = [EXPR] `+` [TERM] | [EXPR] `-` [TERM] | [TERM]
+[TERM] = [NUM]
+[NUM] = `x`
