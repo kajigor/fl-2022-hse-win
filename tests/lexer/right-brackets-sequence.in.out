@@ -1,0 +1,8 @@
+LexToken(START,'S',1,0)
+LexToken(NON_TERMINAL,'S',2,9)
+LexToken(RULE,'->',2,12)
+LexToken(TERMINAL,'(',2,15)
+LexToken(NON_TERMINAL,'S',2,19)
+LexToken(TERMINAL,')',2,22)
+LexToken(OR,'|',2,26)
+LexToken(NULL,'NULL',2,28)
