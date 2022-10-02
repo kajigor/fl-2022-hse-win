@@ -1,0 +1,6 @@
+initial_not_terminal=«S»
+«S» -> ⌊(⌋ «A» ⌊)⌋ | «A»
+
+
+
+«A» -> «A» «A» | ⌊|⌋ | EPS

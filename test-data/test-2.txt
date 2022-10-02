@@ -1,0 +1,4 @@
+initial_not_terminal=«S»
+«S» -> ⌊a$⌋ «S» ⌊a⌋ | ⌊b⌋ «S» ⌊b⌋ | «not_wr0\&#8970;gfdsgfds &#8971;\ng_name»  |EPS
+
+«not_wr0\&#8970;gfdsgfds &#8971;\ng_name» -> ⌊lit\eral⌋

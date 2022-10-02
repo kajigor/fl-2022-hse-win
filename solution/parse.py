@@ -1,7 +1,5 @@
 import ply.yacc as yacc
 
-from lex import tokens
-
 precedence = (
   ('left', 'PLUS', 'MINUS'),
   ('left', 'MULT', 'DIV'),
