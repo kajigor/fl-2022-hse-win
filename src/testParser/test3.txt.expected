@@ -1,0 +1,6 @@
+Start nonterminal: AB
+(AB) -> [AB](AB) | (AB) | [AB]
+(AB) -> [CD]
+(A->B) -> [A->B|B]
+(AB) -> eps | [AB]
+contextually free grammar not in Chomsky normal form

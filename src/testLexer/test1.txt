@@ -1,0 +1,3 @@
+start (AB);
+(AB) -> [AB](AB) | (AB) | [AB];
+(AB) -> [CD];

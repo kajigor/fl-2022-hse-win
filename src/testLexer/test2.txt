@@ -1,0 +1,2 @@
+start (ABVC);
+(AC) -> [BD](CDE)[AB] | [AB] | (ABC);

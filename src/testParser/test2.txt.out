@@ -1,0 +1,5 @@
+Start nonterminal: ABVC
+(AC) -> (AD)(BD)
+(AC) -> eps
+(AC) -> [BD] | [CD]
+contextually free grammar in Chomsky's normal form 

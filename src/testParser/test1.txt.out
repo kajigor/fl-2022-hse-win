@@ -1,0 +1,4 @@
+Start nonterminal: AB
+(AB) -> [AB](AB) | (AB) | [AB]
+(AB) -> [CD]
+contextually free grammar not in Chomsky normal form
