@@ -1,0 +1,5 @@
+<start> = {S}
+{Class} = {High} | {Middle}
+{High} = [9]{Letter} | [10]{Letter} | {11}{Letter}
+{Middle} = [5]{Letter} | [6]{Letter} | [7]{Letter}
+{Letter} = [a] | [b] | [c]

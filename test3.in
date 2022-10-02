@@ -1,0 +1,3 @@
+<start> = {tree}
+{tree} = {oak} | [1]{oak}
+{oak} = [dub]

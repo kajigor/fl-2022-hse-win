@@ -1,0 +1,4 @@
+<start> = {MYAU}
+{MYAU} = [cat] | [kitten] | {DOG}
+{DOG} = [gav]
+
