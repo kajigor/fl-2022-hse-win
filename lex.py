@@ -26,9 +26,9 @@ def t_START(token):
   token.value = token.value[7:-1]
   return token
 
-t_ARROW = r'->'
+t_ARROW = r'👉'
 
-t_SEPARATOR = r'\|'
+t_SEPARATOR = r'🤌'
 
 t_END = r'🗿'
 
