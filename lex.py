@@ -1,43 +1,35 @@
 import ply.lex as lex
 import sys
 
-# 1 + 2 * x123 + if x then 31 else 42
-
-reserved = {
-  'if': 'IF',
-  'then': 'THEN',
-  'else': 'ELSE'
-}
-
 tokens = [
-  'NUM',
-  'PLUS',
-  'MINUS',
-  'MULT',
-  'DIV',
-  'POW',
-  'ID',
-  'LBR',
-  'RBR'
-] + list(reserved.values())
+  'START',
+  'TERM',
+  'NON_TERM',
+  'RULE',
+  'CONCAT',
+]
 
-def t_ID(t):
-  r'[a-z_][a-z_0-9]*'
-  t.type = reserved.get(t.value, 'ID')
+t_RULE = r'\->'
+t_CONCAT = r'\+'
+t_START = r'=>'
+
+escapes = {'\@': '@',
+           '\&': '&'}
+
+def clear_escapes(line):
+  for char in escapes:
+    line = line.replace(char, escapes[char])
+  return line
+
+def t_TERM(t):
+  r'@(([^\\]*?)|\\.)*?@'
+  t.value = clear_escapes(t.value[1:-1])
   return t
 
-def t_NUM(t):
-  r'[0-9]+'
-  t.value = int(t.value)
+def t_NON_TERM(t):
+  r'&(([^\\]*?)|\\.)*?&'
+  t.value = clear_escapes(t.value[1:-1])
   return t
-
-t_PLUS = r'\+'
-t_MINUS = r'\-'
-t_MULT = r'\*'
-t_DIV = r'\/'
-t_POW = r'\*\*'
-t_LBR = r'\('
-t_RBR = r'\)'
 
 t_ignore = ' \t'
 
