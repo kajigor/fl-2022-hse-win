@@ -1,16 +1,49 @@
-LexToken(INITIAL,'S',1,0)
-LexToken(NOT_TERMINAL,'S',2,0)
-LexToken(IMPLICATION,'->',2,4)
-LexToken(TERMINAL,'(',2,7)
-LexToken(NOT_TERMINAL,'A',2,11)
-LexToken(TERMINAL,')',2,15)
-LexToken(ALTERNATIVE,'|',2,19)
-LexToken(NOT_TERMINAL,'A',2,21)
-LexToken(NOT_TERMINAL,'A',6,0)
+LexToken(INITIAL,'Start',1,0)
+LexToken(NOT_TERMINAL,'Start',2,0)
+LexToken(IMPLICATION,'->',2,8)
+LexToken(TERMINAL,'a$%^Q#fdsa',2,11)
+LexToken(NOT_TERMINAL,'$#!@FDASFDS',2,24)
+LexToken(NOT_TERMINAL,'Start',3,0)
+LexToken(IMPLICATION,'->',3,8)
+LexToken(TERMINAL,'b',3,11)
+LexToken(NOT_TERMINAL,'S',3,15)
+LexToken(TERMINAL,'b',3,19)
+LexToken(NOT_TERMINAL,'$#!@FDASFDS',4,0)
+LexToken(IMPLICATION,'->',4,14)
+LexToken(TERMINAL,'foo',4,17)
+LexToken(TERMINAL,'bar',4,23)
+LexToken(NOT_TERMINAL,'$#!@FDASFDS',4,29)
+LexToken(NOT_TERMINAL,'$#!@FDASFDS',5,0)
+LexToken(IMPLICATION,'->',5,14)
+LexToken(EPSILON,'EPS',5,17)
+LexToken(NOT_TERMINAL,'S',6,0)
 LexToken(IMPLICATION,'->',6,4)
-LexToken(NOT_TERMINAL,'A',6,7)
-LexToken(NOT_TERMINAL,'A',6,11)
-LexToken(ALTERNATIVE,'|',6,15)
-LexToken(TERMINAL,'|',6,17)
-LexToken(ALTERNATIVE,'|',6,21)
-LexToken(EPSILON,'EPS',6,23)
+LexToken(NOT_TERMINAL,'not_strange_name',6,7)
+LexToken(NOT_TERMINAL,'S',7,0)
+LexToken(IMPLICATION,'->',7,4)
+LexToken(EPSILON,'EPS',7,7)
+LexToken(NOT_TERMINAL,'not_strange_name',8,0)
+LexToken(IMPLICATION,'->',8,19)
+LexToken(TERMINAL,'terminal',8,22)
+
+
+Начальный нетерминал: Start
+Терминалы:
+	a$%^Q#fdsa
+	foo
+	bar
+	b
+	terminal
+Нетерминалы:
+	Start
+	$#!@FDASFDS
+	S
+	not_strange_name
+Правила КС грамматики:
+	Start --->  a$%^Q#fdsa$#!@FDASFDS
+	Start --->  bSb
+	$#!@FDASFDS --->  foobar$#!@FDASFDS
+	$#!@FDASFDS --->  EPS
+	S --->  not_strange_name
+	S --->  EPS
+	not_strange_name --->  terminal

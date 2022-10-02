@@ -8,7 +8,6 @@ tokens = [
     'NOT_TERMINAL',
     'INITIAL',
     'IMPLICATION',
-    'ALTERNATIVE',
     'EPSILON'
 ]
 
@@ -33,8 +32,6 @@ def t_INITIAL(t):
 
 t_IMPLICATION = r'->'
 
-t_ALTERNATIVE = r'\|'
-
 t_EPSILON = r'EPS'
 
 t_ignore = ' \t'
@@ -49,7 +46,6 @@ def t_error(t):
     global error, output_file
     print(f"Lexical error in '%s' at line {t.lexer.lineno}" % t.value[0], file=output_file)
     t.lexer.skip(len(t.value))
-
     error = True
 
 

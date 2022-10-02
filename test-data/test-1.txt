@@ -1,6 +1,8 @@
-initial_not_terminal=«S»
-«S» -> ⌊(⌋ «A» ⌊)⌋ | «A»
-
-
-
-«A» -> «A» «A» | ⌊|⌋ | EPS
+initial_not_terminal=«Start»
+«Start» -> ⌊a$%^Q#fdsa⌋ «$#!@FDASFDS»
+«Start» -> ⌊b⌋ «S» ⌊b⌋
+«$#!@FDASFDS» -> ⌊foo⌋ ⌊bar⌋ «$#!@FDASFDS»
+«$#!@FDASFDS» -> EPS
+«S» -> «not_strange_name»
+«S» -> EPS
+«not_strange_name» -> ⌊terminal⌋
