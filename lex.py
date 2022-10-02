@@ -11,19 +11,19 @@ tokens = [
 ]
 
 def t_START(t):
-    r"\<start\>\ =\ \{(\S+(?<!(?!<\\)\\|\$))\}"
+    r"\<start\>\ =\ \{(\S+(?<!(?!<\\))\\|\{|\}|\[|\])\}"
     t.value = t.value[11:-1]
     return t
 
 
 def t_NON_TERM(t):
-    r'\{(\S+(?<!(?!<\\)\\|\$))\}'
+    r'\{(\S+(?<!(?!<\\)\\|\{|\}))\}'
     t.value = t.value[1:-1]
     return t
 
 
 def t_TERM(t):
-    r'\[(\S+(?<!(?!<\\)\\|\$))\]'
+    r'\[(\S+(?<!(?!<\\)\\|\[|\]))\]'
     t.value = t.value[1:-1]
     return t
 
