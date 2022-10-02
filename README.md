@@ -41,7 +41,7 @@ $e\$cap\\e -> '(' $e\$cap\\e ')' | NULL;
 start=$expr
 $expr -> $expr '+' $term | $expr '-' $term | $term;
 $term -> $term '*' $mult | $term '/' $mult | $mult;
-$mult -> '(' $expr ')'   | 0 | 1 | 3;
+$mult -> '(' $expr ')'   | '0' | '1' | '3';
 ```
 
 4. **Палиндромы над алфавитом {a, b}**:
