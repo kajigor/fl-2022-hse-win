@@ -1,0 +1,8 @@
+LexToken(FIRST_NOT_A_TERMINAL,'wtf"',1,0)
+LexToken(NOT_A_TERMINAL,'wtf"',2,14)
+LexToken(BIND,'~',2,22)
+LexToken(NOT_A_TERMINAL,'wtf""',2,24)
+LexToken(ENDL,',',2,33)
+LexToken(NOT_A_TERMINAL,'wtf""',3,35)
+LexToken(BIND,'~',3,45)
+LexToken(NOT_A_TERMINAL,'correct\\',3,47)

@@ -1,0 +1,4 @@
+first~"A"
+"A" ~ "A""B" | 'a' | NULL,
+"B" ~ "A"'b' | "C"       ,
+"C" ~ 'ab'   | NULL
