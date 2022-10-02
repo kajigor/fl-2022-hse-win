@@ -6,11 +6,9 @@ tokens = [
   'TERM',
   'NON_TERM',
   'RULE',
-  'CONCAT',
 ]
 
 t_RULE = r'\->'
-t_CONCAT = r'\+'
 t_START = r'=>'
 
 escapes = {'\@': '@',
@@ -42,10 +40,10 @@ def t_error(t):
   t.lexer.skip(1)
 
 lexer = lex.lex()
-
+sys.stdout = open(sys.argv[1] + '.out', mode='w')
 def main():
   lexer = lex.lex()
-  lexer.input(sys.argv[1])
+  lexer.input(open(sys.argv[1], mode='r').read())
 
   while True:
     tok = lexer.token()
