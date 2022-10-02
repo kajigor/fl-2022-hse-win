@@ -1,0 +1,3 @@
+$expr -> $expr '+' $term | $expr '-' $term | $term
+$term -> $term '*' $mult | $term '/' $mult | $mult
+$mult -> '(' $expr ')'   | [any number]
