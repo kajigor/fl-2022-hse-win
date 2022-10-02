@@ -1,65 +1,69 @@
 import ply.lex as lex
 import sys
 
-# 1 + 2 * x123 + if x then 31 else 42
-
-reserved = {
-  'if': 'IF',
-  'then': 'THEN',
-  'else': 'ELSE'
-}
-
 tokens = [
-  'NUM',
-  'PLUS',
-  'MINUS',
-  'MULT',
-  'DIV',
-  'POW',
-  'ID',
-  'LBR',
-  'RBR'
-] + list(reserved.values())
-
-def t_ID(t):
-  r'[a-z_][a-z_0-9]*'
-  t.type = reserved.get(t.value, 'ID')
-  return t
-
-def t_NUM(t):
-  r'[0-9]+'
-  t.value = int(t.value)
-  return t
-
-t_PLUS = r'\+'
-t_MINUS = r'\-'
-t_MULT = r'\*'
-t_DIV = r'\/'
-t_POW = r'\*\*'
-t_LBR = r'\('
-t_RBR = r'\)'
+  'START',
+  'ARROW',
+  'SEPARATOR',
+  'END',
+  'EMPTY',
+  'NON_TERMINAL',
+  'TERMINAL',
+]
 
 t_ignore = ' \t'
 
-def t_newline(t):
+def t_newline(token):
   r'\n+'
-  t.lexer.lineno += len(t.value)
+  token.lexer.lineno += len(token.value)
 
-def t_error(t):
-  print("Illegal character '%s'" % t.value[0])
-  t.lexer.skip(1)
+def t_error(token):
+  print("Illegal character '%s'" % token.value[0])
+  token.lexer.skip(1)
+
+def t_START(token):
+  r'start=🤯[\x00-\x7F]+🤯'
+  token.value = token.value[7:-1]
+  return token
+
+t_ARROW = r'->'
+
+t_SEPARATOR = r'\|'
+
+t_END = r'🗿'
+
+t_EMPTY = r'😵'
+
+def t_NON_TERMINAL(token):
+  r'🤯[\x00-\x7F]+🤯'
+  token.value = token.value[1:-1]
+  return token
+
+def t_TERMINAL(token):
+  r'🥵[\x00-\x7F]+🥵'
+  token.value = token.value[1:-1]
+  return token
 
 lexer = lex.lex()
 
 def main():
   lexer = lex.lex()
-  lexer.input(sys.argv[1])
 
-  while True:
-    tok = lexer.token()
-    if not tok:
-      break
-    print(tok)
+  if len(sys.argv) > 1:
+    filename = sys.argv[1]
+
+    with open(filename, "r", encoding="utf-8") as grammar, open(filename + ".out", "w", encoding="utf-8") as output_grammar:
+      lexer.input("".join(grammar.readlines()))
+
+      while token := lexer.token():
+        print(token, file=output_grammar)
+  else:
+    while True:
+      lexer.input(input("> "))
+
+      while token := lexer.token():
+        print(token)
+
 
 if __name__ == "__main__":
-    main()
+  main()
