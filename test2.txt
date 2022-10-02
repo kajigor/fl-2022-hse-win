@@ -1,0 +1,4 @@
+terminals{(, )}
+start{S}
+rules{S -> S(S), S -> (S)S}
+rules{S -> eps}
