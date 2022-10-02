@@ -1,0 +1,6 @@
+set_start S
+n'S'n to t'a't n'S'n n'A'n
+n'S'n to t'a't n'T'n
+n'T'n n'A'n to t'b't n'T'n t'a't
+t'a't n'A'n to n'A'n t'a't
+n'T'n to t'b't t'a't

@@ -1,0 +1,4 @@
+n'S'n to t'('t n'S'n t')'t
+n'S'n to eps
+n'S'n to n'S'n n'S'n
+set_start S
