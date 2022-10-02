@@ -1,0 +1,15 @@
+Start: 
+S
+NonTerminals: 
+S
+T
+A
+Terminals: 
+b
+a
+Rules: 
+S to aSA
+S to aT
+TA to bTa
+aA to Aa
+T to ba

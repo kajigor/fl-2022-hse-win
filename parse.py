@@ -1,7 +1,6 @@
 import ply.yacc as yacc
-
-from lex import tokens
 import sys
+from lex import tokens
 import os
 import os.path
 
@@ -17,7 +16,7 @@ import os.path
 class Grammar:
     terminals = set()
     nonterminals = set()
-    rules = set()
+    rules = list()
     start = ""
     
     def clear(self):
@@ -38,11 +37,44 @@ class Grammar:
             res += term + '\n'
         res += "Rules: \n"
         for rule in self.rules:
-            res += str(rule[0]) + " to " + str(rule[1])
+            for term in rule[0]:
+                res += str(term)
+            res += " to "
+            for term in rule[1]:
+                res += str(term)
+            res += '\n'
         return res
 
 
 grammar = Grammar()
+
+
+def p_expr_start(p):
+    'expr : START SEPARATOR'
+    p[0] = p[1]
+    if grammar.start != "":
+        print("error: ambigous start")
+    grammar.start = p[0]
+
+
+def p_expr_rule(p):
+    'expr : rule SEPARATOR'
+    p[0] = p[1]
+
+
+def p_rule(p):
+    'rule : mult_tokens TO mult_tokens'
+    p[0] = (p[1], p[3])
+    grammar.rules.append(p[0])
+
+def p_mtokens_token(p):
+    'mult_tokens : token'
+    p[0] = list(p[1])
+
+
+def p_mtokens_mtokens_token(p):
+    'mult_tokens : mult_tokens token'
+    p[0] = p[1] + list(p[2])
 
 def p_token_term(p):
     'token : TERM'
@@ -60,45 +92,10 @@ def p_token_eps(p):
     'token : EPS'
     p[0] = p[1]
 
-
-def p_token_start(p):
-    'token : START SEPARATOR'
-    p[0] = p[1]
-    if grammar.start != "":
-        print("error: ambiguous start")
-    grammar.start = p[0]
-
-
-def p_mtokens_token(p):
-    'mult_tokens : token'
-    p[0] = list(p[1])
-
-
-def p_mtokens_mtokens_token(p):
-    'mult_tokens : mult_tokens token'
-    p[0] = p[1] + list(p[2])
-
-
-def p_expr_start(p):
-    'expr : START SEPARATOR'
-    p[0] = p[1]
-    print(1)
-
-
-def p_expr_rule(p):
-    'expr : rule SEPARATOR'
-    p[0] = p[1]
-    print(1)
-
-
-def p_rule(p):
-    'rule : mult_tokens TO mult_tokens'
-    p[0] = (p[1], p[3])
-    grammar.rules.add(p[0])
-
 def p_error(p):
   if p == None:
-    print("Unexpected EOF")
+    token = "end of file"
+    parser.errok()
   else:
     token = f"{p.type}({p.value}) on line {p.lineno}"
 

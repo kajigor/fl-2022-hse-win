@@ -3,20 +3,24 @@ import sys
 import os
 import os.path
 
+reserved = {
+  'eps': 'EPS',
+  'to': 'TO',
+  ';' : 'SEPARATOR'
+}
 tokens = [
   'TERM',
   'NONTERM',
   'START',
-  'EPS',
-  'TO',
-  'SEPARATOR'
-]
+  'ID'
+] + list(reserved.values())
 
-
-t_EPS = r'eps'
-t_TO = r'to'
-t_SEPARATOR = r';'
 t_ignore = ' \t'
+
+def t_ID(t):
+  r'eps|to|;'
+  t.type = reserved.get(t.value, 'ID')
+  return t
 
 
 def t_TERM(t):

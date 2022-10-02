@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'EPS NONTERM SEPARATOR START TERM TOtoken : TERMtoken : NONTERMtoken : EPStoken : START SEPARATORmult_tokens : tokenmult_tokens : mult_tokens tokenexpr : START SEPARATORexpr : rule SEPARATORrule : mult_tokens TO mult_tokens'
+_lr_signature = 'EPS ID NONTERM SEPARATOR START TERM TOexpr : START SEPARATORexpr : rule SEPARATORrule : mult_tokens TO mult_tokensmult_tokens : tokenmult_tokens : mult_tokens tokentoken : TERMtoken : NONTERMtoken : EPS'
     
-_lr_action_items = {'TERM':([0,],[2,]),'NONTERM':([0,],[3,]),'EPS':([0,],[4,]),'START':([0,],[5,]),'$end':([1,2,3,4,6,],[0,-1,-2,-3,-4,]),'SEPARATOR':([5,],[6,]),}
+_lr_action_items = {'START':([0,],[2,]),'TERM':([0,4,5,6,7,8,11,12,13,],[6,6,-4,-6,-7,-8,6,-5,6,]),'NONTERM':([0,4,5,6,7,8,11,12,13,],[7,7,-4,-6,-7,-8,7,-5,7,]),'EPS':([0,4,5,6,7,8,11,12,13,],[8,8,-4,-6,-7,-8,8,-5,8,]),'$end':([1,9,10,],[0,-1,-2,]),'SEPARATOR':([2,3,5,6,7,8,12,13,],[9,10,-4,-6,-7,-8,-5,-3,]),'TO':([4,5,6,7,8,12,],[11,-4,-6,-7,-8,-5,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'token':([0,],[1,]),}
+_lr_goto_items = {'expr':([0,],[1,]),'rule':([0,],[3,]),'mult_tokens':([0,11,],[4,13,]),'token':([0,4,11,13,],[5,12,5,12,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,14 +26,13 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> token","S'",1,None,None,None),
-  ('token -> TERM','token',1,'p_token_term','parse.py',48),
-  ('token -> NONTERM','token',1,'p_token_NONTERM','parse.py',54),
-  ('token -> EPS','token',1,'p_token_eps','parse.py',60),
-  ('token -> START SEPARATOR','token',2,'p_token_start','parse.py',65),
-  ('mult_tokens -> token','mult_tokens',1,'p_mtokens_token','parse.py',73),
-  ('mult_tokens -> mult_tokens token','mult_tokens',2,'p_mtokens_mtokens_token','parse.py',78),
-  ('expr -> START SEPARATOR','expr',2,'p_expr_start','parse.py',83),
-  ('expr -> rule SEPARATOR','expr',2,'p_expr_rule','parse.py',89),
-  ('rule -> mult_tokens TO mult_tokens','rule',3,'p_rule','parse.py',95),
+  ("S' -> expr","S'",1,None,None,None),
+  ('expr -> START SEPARATOR','expr',2,'p_expr_start','parse.py',48),
+  ('expr -> rule SEPARATOR','expr',2,'p_expr_rule','parse.py',56),
+  ('rule -> mult_tokens TO mult_tokens','rule',3,'p_rule','parse.py',62),
+  ('mult_tokens -> token','mult_tokens',1,'p_mtokens_token','parse.py',67),
+  ('mult_tokens -> mult_tokens token','mult_tokens',2,'p_mtokens_mtokens_token','parse.py',72),
+  ('token -> TERM','token',1,'p_token_term','parse.py',76),
+  ('token -> NONTERM','token',1,'p_token_NONTERM','parse.py',82),
+  ('token -> EPS','token',1,'p_token_eps','parse.py',88),
 ]
