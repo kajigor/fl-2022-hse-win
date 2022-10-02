@@ -1,0 +1,37 @@
+a x 0 1 2 3 4 5 6 7 8 9 ^
+S A X N N0
+S
+
+S 0
+S N A
+
+A a ^ N X
+A a X
+A X
+
+X x ^ N
+X x
+X
+
+N 0
+N 1 N0
+N 2 N0
+N 3 N0
+N 4 N0
+N 5 N0
+N 6 N0
+N 7 N0
+N 8 N0
+N 9 N0
+
+N0
+N0 0 N0
+N0 1 N0
+N0 2 N0
+N0 3 N0
+N0 4 N0
+N0 5 N0
+N0 6 N0
+N0 7 N0
+N0 8 N0
+N0 9 N0

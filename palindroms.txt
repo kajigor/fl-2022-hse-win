@@ -1,0 +1,8 @@
+\n\s a b \t
+S
+S
+S a S a
+S b S b
+S \n\s S \n\s
+S \t S \t
+S
