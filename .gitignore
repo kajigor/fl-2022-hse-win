@@ -24,5 +24,4 @@ cabal.project.local~
 
 **/venv/
 **/__pycache__/
-**/*.out
 example/
