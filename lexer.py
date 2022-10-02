@@ -3,14 +3,15 @@ import sys
 import ply.lex as lex
 
 tokens = [
-    'OR',
-    'RULE',
-    'NULL',
-    'SEPARATOR',
-    'TERMINAL',
-    'NON_TERMINAL',
-    'START',
+    "OR",
+    "RULE",
+    "NULL",
+    "SEPARATOR",
+    "TERMINAL",
+    "NON_TERMINAL",
+    "START",
 ]
+
 
 def t_newline(t):
     r"\n+"
@@ -23,10 +24,10 @@ def t_error(t):
 
 
 # defining tokens
-t_OR = r'\|'
-t_RULE = r'->'
-t_NULL = r'NULL'
-t_SEPARATOR = r';'
+t_OR = r"\|"
+t_RULE = r"->"
+t_NULL = r"NULL"
+t_SEPARATOR = r";"
 t_ignore = " \t"
 
 
@@ -37,16 +38,15 @@ def t_TERMINAL(token):
 
 
 def t_NON_TERMINAL(token):
-    r'\$(\S+(?<!(?!<\\)\\|\$))'
+    r"\$(\S+(?<!(?!<\\)\\|\$))"
     token.value = remove_escape(token.value[1:])
     return token
 
 
 def t_START(token):
-    r'start=\$(\S+(?<!(?!<\\)\\|\$))'
+    r"start=\$(\S+(?<!(?!<\\)\\|\$))"
     token.value = remove_escape(token.value[7:])
     return token
-
 
 
 # helpers
