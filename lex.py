@@ -1,65 +1,77 @@
 import ply.lex as lex
 import sys
 
-# 1 + 2 * x123 + if x then 31 else 42
-
-reserved = {
-  'if': 'IF',
-  'then': 'THEN',
-  'else': 'ELSE'
-}
-
 tokens = [
-  'NUM',
-  'PLUS',
-  'MINUS',
-  'MULT',
-  'DIV',
-  'POW',
-  'ID',
-  'LBR',
-  'RBR'
-] + list(reserved.values())
+    'TERMINAL',
+    'NONTERMINAL',
+    'START',
+    'EMPTY',
+    'EQ',
+    'PIPE'
+]
 
-def t_ID(t):
-  r'[a-z_][a-z_0-9]*'
-  t.type = reserved.get(t.value, 'ID')
-  return t
 
-def t_NUM(t):
-  r'[0-9]+'
-  t.value = int(t.value)
-  return t
+def t_TERMINAL(t):
+    r'\`.+?(?<!\\)\`'
+    t.value = t.value[1:-1]
+    return t
 
-t_PLUS = r'\+'
-t_MINUS = r'\-'
-t_MULT = r'\*'
-t_DIV = r'\/'
-t_POW = r'\*\*'
-t_LBR = r'\('
-t_RBR = r'\)'
+
+def t_NONTERMINAL(t):
+    r'\[.+?(?<!\\)\]'
+    t.value = t.value[1:-1]
+    return t
+
+
+def t_START(t):
+    r'start=\[.+\]'
+    t.value = t.value[7:-1]
+    return t
+
+
+def t_EMPTY(t):
+    r'empty=\[.*\]'
+    t.value = t.value[7:-1]
+    return t
+
+
+t_EQ = r'='
+t_PIPE = r'\|'
 
 t_ignore = ' \t'
 
+
 def t_newline(t):
-  r'\n+'
-  t.lexer.lineno += len(t.value)
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+
 
 def t_error(t):
-  print("Illegal character '%s'" % t.value[0])
-  t.lexer.skip(1)
+    print("Illegal character '%s'" % t.value[0])
+    t.lexer.skip(1)
+
 
 lexer = lex.lex()
 
-def main():
-  lexer = lex.lex()
-  lexer.input(sys.argv[1])
 
-  while True:
-    tok = lexer.token()
-    if not tok:
-      break
-    print(tok)
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: python3 <run_file> <input_file>")
+        return
+
+    input_file = str(sys.argv[1])
+    output_file = input_file + ".out"
+
+    with open(input_file, "r") as input, open(output_file, "w") as output:
+        lexer = lex.lex()
+        lexer.input("".join(input.readlines()))
+
+        while True:
+            tok = lexer.token()
+            if not tok:
+                break
+            print(tok, file=output)
+
 
 if __name__ == "__main__":
     main()

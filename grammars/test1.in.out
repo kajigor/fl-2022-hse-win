@@ -1,0 +1,7 @@
+LexToken(START,'S',1,0)
+LexToken(EMPTY,'E',2,10)
+LexToken(NONTERMINAL,'S',3,20)
+LexToken(EQ,'=',3,24)
+LexToken(TERMINAL,'z',3,26)
+LexToken(PIPE,'|',3,30)
+LexToken(NONTERMINAL,'E',3,32)
