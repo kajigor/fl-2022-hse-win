@@ -38,7 +38,7 @@ def t_TERMINAL(token):
 
 
 def t_NON_TERMINAL(token):
-    r"\$(\S+(?<!(?!<\\)\\|\$))"
+    r"\$(\S+(?<!(?!<\\)\\|\$|;))"
     token.value = remove_escape(token.value[1:])
     return token
 
