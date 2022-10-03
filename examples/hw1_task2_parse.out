@@ -1,9 +1,9 @@
 Start: 
 S
 NonTerminals: 
-S
-T
 A
+T
+S
 Terminals: 
 b
 a

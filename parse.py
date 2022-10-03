@@ -69,12 +69,12 @@ def p_rule(p):
 
 def p_mtokens_token(p):
     'mult_tokens : token'
-    p[0] = list(p[1])
+    p[0] = [p[1]]
 
 
 def p_mtokens_mtokens_token(p):
     'mult_tokens : mult_tokens token'
-    p[0] = p[1] + list(p[2])
+    p[0] = p[1] + [p[2]]
 
 def p_token_term(p):
     'token : TERM'

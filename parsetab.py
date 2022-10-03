@@ -27,12 +27,12 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> expr","S'",1,None,None,None),
-  ('expr -> START SEPARATOR','expr',2,'p_expr_start','parse.py',48),
-  ('expr -> rule SEPARATOR','expr',2,'p_expr_rule','parse.py',56),
-  ('rule -> mult_tokens TO mult_tokens','rule',3,'p_rule','parse.py',62),
-  ('mult_tokens -> token','mult_tokens',1,'p_mtokens_token','parse.py',67),
-  ('mult_tokens -> mult_tokens token','mult_tokens',2,'p_mtokens_mtokens_token','parse.py',72),
-  ('token -> TERM','token',1,'p_token_term','parse.py',76),
-  ('token -> NONTERM','token',1,'p_token_NONTERM','parse.py',82),
-  ('token -> EPS','token',1,'p_token_eps','parse.py',88),
+  ('expr -> START SEPARATOR','expr',2,'p_expr_start','parse.py',53),
+  ('expr -> rule SEPARATOR','expr',2,'p_expr_rule','parse.py',61),
+  ('rule -> mult_tokens TO mult_tokens','rule',3,'p_rule','parse.py',66),
+  ('mult_tokens -> token','mult_tokens',1,'p_mtokens_token','parse.py',71),
+  ('mult_tokens -> mult_tokens token','mult_tokens',2,'p_mtokens_mtokens_token','parse.py',76),
+  ('token -> TERM','token',1,'p_token_term','parse.py',80),
+  ('token -> NONTERM','token',1,'p_token_NONTERM','parse.py',86),
+  ('token -> EPS','token',1,'p_token_eps','parse.py',92),
 ]
