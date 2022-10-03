@@ -37,22 +37,64 @@ class Null:
     pass
 
 
+
 Entity = Union[Terminal, NonTerminal, Null]
+
+
 
 @dataclass
 class Combination:
     values: List[Entity]
+
+    def to_string(self, tabs='') -> str:
+        result = "Combination(\n"
+
+        for value in self.values:
+            result += f"{tabs}\t{value},\n"
+
+        result += f"{tabs})"
+        return result
+
 
 
 @dataclass
 class Alt:
     values: List[Union[Combination, Entity]]
 
+    def to_string(self, tabs='') -> str:
+        result = "Alt(\n"
+        inner_tabs = tabs + "\t"
+
+        for value in self.values:
+            if isinstance(value, Combination):
+                result += f"{tabs}\t{value.to_string(inner_tabs)},\n"
+            else:
+                result += f"{tabs}\t{value},\n"
+
+        result += f"{tabs})"
+
+        return result
+
 
 @dataclass
 class Bind:
     name: str
     expr: Union[Alt, Combination, Entity]
+
+    def to_string(self, additional_tabs='') -> str:
+        tabs = "\t" + additional_tabs
+
+        result = f"{additional_tabs}Bind " + "{\n"
+        result += f"\tname: '{self.name}',\n"
+
+        if isinstance(self.expr, Alt) or isinstance(self.expr, Combination):
+            result += f"\texpr: {self.expr.to_string(tabs)}\n"
+        else:
+            result += f"\texpr: {self.expr}\n"
+
+        result += f"{additional_tabs}" + "}"
+
+        return result
 
 
 @dataclass
@@ -61,6 +103,22 @@ class Grammar:
     non_terminals: Set[str]
     start: str
     rules: List[Bind]
+
+    def to_string(self) -> str:
+        result = "-- Grammar -- \n\n"
+        result += f"Terminals: {self.terminals}\n\n"
+        result += f"Non-terminals: {self.non_terminals}\n\n"
+        result += f"Start: '{self.start}'\n\n"
+
+        result += "Rules: {\n"
+
+        for rule in self.rules:
+            result += rule.to_string('\t') + "\n"
+
+        result += "}\n"
+
+        return result
+
 
 
 def extract_terminals(expr: Union[Alt, Combination, Entity]) -> Set[str]:
@@ -93,6 +151,46 @@ def extract_non_terminals(expr: Union[Alt, Combination, Entity]) -> Set[str]:
         return set()
 
     raise ValueError("Invalid expression provided!")
+
+
+
+def is_correct_combination_values(value, start) -> bool:
+    return isinstance(value, NonTerminal) and value != start
+
+
+
+def is_correct_chomsky_value(start: str, expr:Union[Combination, Alt, Entity]) -> bool:
+    if isinstance(expr, Entity):
+        return not isinstance(expr, NonTerminal) # Null or Terminal -> true
+
+
+    if isinstance(expr, Combination):
+        return len(expr.values) == 2 \
+               and is_correct_combination_values(expr.values[0], start) \
+               and is_correct_combination_values(expr.values[1], start)
+
+    if isinstance(expr, Alt):
+        return all(map(lambda value: is_correct_chomsky_value(start, value), expr.values))
+
+
+
+def is_null(expr : Union[Combination, Alt, Entity]) -> bool:
+    if isinstance(expr, Entity):
+        return isinstance(expr, Null)
+
+    if isinstance(expr, Combination):
+        return all(map(is_null, expr.values))
+
+    if isinstance(expr, Alt):
+        return any(map(is_null, expr.values))
+
+
+
+def is_chomsky_normal_form(grammar : Grammar) -> bool:
+    if any(map(lambda rule: rule.name != grammar.start and is_null(rule.expr), grammar.rules)):
+        return False
+
+    return all(map(lambda rule : is_correct_chomsky_value(grammar.start, rule.expr), grammar.rules))
 
 
 
@@ -196,7 +294,7 @@ def p_error(p):
         print("Unexpected end of input")
     else:
         token = f"{p.type}({p.value}) at {p.lineno}:{p.lexpos}"
-        print(f"Syntax error: Unexpected {token}")
+        print(f"Syntax error: Unexpected {token}", p)
     exit()
 
 
@@ -210,7 +308,10 @@ def main():
         with open(filepath, "r", encoding="utf-8") as code, open(
             filepath + ".out", "w", encoding="utf-8"
         ) as result:
-            print(parser.parse("".join(code.readlines())), file=result)
+            grammar=parser.parse("".join(code.readlines()))
+            output = f"{grammar.to_string()}\nChomsky normal form: {is_chomsky_normal_form(grammar)}\n"
+
+            print(output, file=result)
     else:
         while True:
             print(parser.parse(input()))
