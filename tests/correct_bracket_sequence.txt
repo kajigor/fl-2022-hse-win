@@ -1,0 +1,2 @@
+STARTING_NON_TERMINAL = $S$;
+$S$ = { "(" $S$ ")" $S$ }; $S$ = { EPS };
