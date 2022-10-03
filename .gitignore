@@ -23,3 +23,5 @@ cabal.project.local~
 .ghc.environment.*
 .vscode/settings.json
 __pycache__
+parser.out
+parsertab.py
