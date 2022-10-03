@@ -1,0 +1,1 @@
+Grammar(terminals={')', '('}, non_terminals={'S'}, start='S', rules=[Bind(name='S', expr=Alt(values=[Combination(values=[Terminal(value='('), NonTerminal(value='S'), Terminal(value=')')]), Null()]))])
