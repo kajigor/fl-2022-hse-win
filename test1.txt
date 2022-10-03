@@ -1,4 +1,0 @@
-terminals{a}
-nonterminals{A, B}
-start{S}
-rules{S -> AB, A -> a, B -> aa}
