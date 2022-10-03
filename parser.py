@@ -37,20 +37,22 @@ class Null:
     pass
 
 
+Entity = Union[Terminal, NonTerminal, Null]
+
 @dataclass
 class Combination:
-    values: List[Union[Terminal, NonTerminal, Null]]
+    values: List[Entity]
 
 
 @dataclass
 class Alt:
-    values: List[Union[Combination, Terminal, NonTerminal, Null]]
+    values: List[Union[Combination, Entity]]
 
 
 @dataclass
 class Bind:
     name: str
-    expr: Union[Alt, Combination, Terminal, NonTerminal, Null]
+    expr: Union[Alt, Combination, Entity]
 
 
 @dataclass
@@ -61,7 +63,7 @@ class Grammar:
     rules: List[Bind]
 
 
-def extract_terminals(expr: Union[Alt, Combination, Terminal, NonTerminal, Null]) -> Set[str]:
+def extract_terminals(expr: Union[Alt, Combination, Entity]) -> Set[str]:
     if isinstance(expr, Alt) or isinstance(expr, Combination):
         return reduce(
             lambda result, items: result.union(items),
@@ -77,7 +79,7 @@ def extract_terminals(expr: Union[Alt, Combination, Terminal, NonTerminal, Null]
     raise ValueError("Invalid expression provided!")
 
 
-def extract_non_terminals(expr: Union[Alt, Combination, Terminal, NonTerminal, Null]) -> Set[str]:
+def extract_non_terminals(expr: Union[Alt, Combination, Entity]) -> Set[str]:
     if isinstance(expr, Alt) or isinstance(expr, Combination):
         return reduce(
             lambda result, items: result.union(items),
@@ -109,8 +111,8 @@ def construct_grammar(start : str, rules : List[Bind]) -> Grammar:
 
 
 def construct_alt(
-    left: Union[Alt, Combination, Terminal, NonTerminal, Null],
-    right: Union[Combination, Terminal, NonTerminal, Null]
+    left: Union[Alt, Combination, Entity],
+    right: Union[Combination, Entity]
 ) -> Alt:
     if isinstance(left, Alt):
         return Alt(left.values + [ right ])
@@ -121,8 +123,8 @@ def construct_alt(
 
 
 def construct_combination(
-    left: Union[Combination, Terminal, NonTerminal, Null],
-    right: Union[Terminal, NonTerminal, Null],
+    left: Union[Combination, Entity],
+    right: Entity,
 ) -> Combination:
     if isinstance(left, Combination):
         return Combination(left.values + [ right ])
