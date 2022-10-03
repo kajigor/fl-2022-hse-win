@@ -54,9 +54,11 @@ def remove_escape(string: str) -> str:
     return string.replace("\\$", "$").replace("\\\\", "\\")
 
 
-def main():
-    lexer = lex.lex()
 
+lexer = lex.lex()
+
+
+def main():
     if len(sys.argv) > 1:
         filename: str = sys.argv[1]
 
