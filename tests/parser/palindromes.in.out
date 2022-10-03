@@ -1,0 +1,31 @@
+-- Grammar -- 
+
+Terminals: {'a', 'b'}
+
+Non-terminals: {'S'}
+
+Start: 'S'
+
+Rules: {
+	Bind {
+	name: 'S',
+	expr: Alt(
+			Combination(
+				Terminal(value='a'),
+				NonTerminal(value='S'),
+				Terminal(value='a'),
+			),
+			Combination(
+				Terminal(value='b'),
+				NonTerminal(value='S'),
+				Terminal(value='b'),
+			),
+			Terminal(value='a'),
+			Terminal(value='b'),
+			Null(),
+		)
+	}
+}
+
+Chomsky normal form: False
+

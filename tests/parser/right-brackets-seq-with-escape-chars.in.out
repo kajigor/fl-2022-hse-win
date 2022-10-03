@@ -2,17 +2,17 @@
 
 Terminals: {'(', ')'}
 
-Non-terminals: {'S'}
+Non-terminals: {'e$cap\\e'}
 
-Start: 'S'
+Start: 'e$cap\e'
 
 Rules: {
 	Bind {
-	name: 'S',
+	name: 'e$cap\e',
 	expr: Alt(
 			Combination(
 				Terminal(value='('),
-				NonTerminal(value='S'),
+				NonTerminal(value='e$cap\\e'),
 				Terminal(value=')'),
 			),
 			Null(),

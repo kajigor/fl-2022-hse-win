@@ -1,0 +1,62 @@
+-- Grammar -- 
+
+Terminals: {'(', ')'}
+
+Non-terminals: {'C', 'lb', 'rb', 'B', 'S'}
+
+Start: 'A'
+
+Rules: {
+	Bind {
+	name: 'S',
+	expr: Combination(
+			NonTerminal(value='lb'),
+			NonTerminal(value='B'),
+		)
+	}
+	Bind {
+	name: 'A',
+	expr: Alt(
+			Combination(
+				NonTerminal(value='lb'),
+				NonTerminal(value='B'),
+			),
+			Null(),
+		)
+	}
+	Bind {
+	name: 'B',
+	expr: Alt(
+			Combination(
+				NonTerminal(value='S'),
+				NonTerminal(value='C'),
+			),
+			Combination(
+				NonTerminal(value='rb'),
+				NonTerminal(value='S'),
+			),
+			Terminal(value=')'),
+		)
+	}
+	Bind {
+	name: 'C',
+	expr: Alt(
+			Combination(
+				NonTerminal(value='rb'),
+				NonTerminal(value='S'),
+			),
+			Terminal(value=')'),
+		)
+	}
+	Bind {
+	name: 'lb',
+	expr: Terminal(value='(')
+	}
+	Bind {
+	name: 'rb',
+	expr: Terminal(value=')')
+	}
+}
+
+Chomsky normal form: True
+

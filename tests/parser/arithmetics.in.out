@@ -1,0 +1,59 @@
+-- Grammar -- 
+
+Terminals: {'-', '*', '/', '0', ')', '3', '(', '1', '2', '+'}
+
+Non-terminals: {'mult', 'expr', 'term'}
+
+Start: 'expr'
+
+Rules: {
+	Bind {
+	name: 'expr',
+	expr: Alt(
+			Combination(
+				NonTerminal(value='expr'),
+				Terminal(value='+'),
+				NonTerminal(value='term'),
+			),
+			Combination(
+				NonTerminal(value='expr'),
+				Terminal(value='-'),
+				NonTerminal(value='term'),
+			),
+			NonTerminal(value='term'),
+		)
+	}
+	Bind {
+	name: 'term',
+	expr: Alt(
+			Combination(
+				NonTerminal(value='term'),
+				Terminal(value='*'),
+				NonTerminal(value='mult'),
+			),
+			Combination(
+				NonTerminal(value='term'),
+				Terminal(value='/'),
+				NonTerminal(value='mult'),
+			),
+			NonTerminal(value='mult'),
+		)
+	}
+	Bind {
+	name: 'mult',
+	expr: Alt(
+			Combination(
+				Terminal(value='('),
+				NonTerminal(value='expr'),
+				Terminal(value=')'),
+			),
+			Terminal(value='0'),
+			Terminal(value='1'),
+			Terminal(value='2'),
+			Terminal(value='3'),
+		)
+	}
+}
+
+Chomsky normal form: False
+

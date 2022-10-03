@@ -1,2 +1,2 @@
 start=$S
-$S -> 'a' $S 'a' | 'b' $S 'b' | 'a' | 'b' | NULL
+$S -> 'a' $S 'a' | 'b' $S 'b' | 'a' | 'b' | NULL;
