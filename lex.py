@@ -1,65 +1,66 @@
 import ply.lex as lex
 import sys
 
-# 1 + 2 * x123 + if x then 31 else 42
-
-reserved = {
-  'if': 'IF',
-  'then': 'THEN',
-  'else': 'ELSE'
-}
-
 tokens = [
-  'NUM',
-  'PLUS',
-  'MINUS',
-  'MULT',
-  'DIV',
-  'POW',
-  'ID',
-  'LBR',
-  'RBR'
-] + list(reserved.values())
+    'START',
+    'LBR',
+    'RBR',
+    'TERMINAL',
+    'NON_TERMINAL',
+    'EMPTY',
+    'EQUAL',
+    'SEPARATOR'
+]
 
-def t_ID(t):
-  r'[a-z_][a-z_0-9]*'
-  t.type = reserved.get(t.value, 'ID')
-  return t
-
-def t_NUM(t):
-  r'[0-9]+'
-  t.value = int(t.value)
-  return t
-
-t_PLUS = r'\+'
-t_MINUS = r'\-'
-t_MULT = r'\*'
-t_DIV = r'\/'
-t_POW = r'\*\*'
-t_LBR = r'\('
-t_RBR = r'\)'
-
+t_START = r'STARTING_NON_TERMINAL'
+t_EQUAL = r'='
+t_LBR = r'\{'
+t_RBR = r'\}'
+t_SEPARATOR = r';'
+t_EMPTY = r'EPS'
 t_ignore = ' \t'
 
+
+def t_TERMINAL(t):
+    r'"[^"]+"'
+    t.value = t.value[1:-1]
+    return t
+
+
+def t_NON_TERMINAL(t):
+    r'\$[^\$]\$'
+    t.value = t.value[1:-1]
+    return t
+
+
 def t_newline(t):
-  r'\n+'
-  t.lexer.lineno += len(t.value)
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+
 
 def t_error(t):
-  print("Illegal character '%s'" % t.value[0])
-  t.lexer.skip(1)
+    print("Illegal character '%s'" % t.value[0])
+    t.lexer.skip(1)
 
-lexer = lex.lex()
 
 def main():
-  lexer = lex.lex()
-  lexer.input(sys.argv[1])
+    if len(sys.argv) != 2:
+        print(f"Error. Expected 2, received {len(sys.argv) - 1}")
+        exit(1)
 
-  while True:
-    tok = lexer.token()
-    if not tok:
-      break
-    print(tok)
+    lexer = lex.lex()
+
+    file_name = sys.argv[1]
+    sys.stdout = open(file_name + '.out', 'w')
+
+    with open(file_name, 'r') as cin:
+        lexer.input(' '.join(cin.readlines()))
+        while True:
+            t = lexer.token()
+            if not t:
+                break
+            print(t)
+
 
 if __name__ == "__main__":
     main()
