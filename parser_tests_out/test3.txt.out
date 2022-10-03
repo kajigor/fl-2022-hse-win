@@ -1,0 +1,27 @@
+Start terminal is: S
+Terminals are:
+{')', 'b', '(', 'a'}
+Nonterminals are:
+{'S', 'B', 'A'}
+Rules are:
+[(['S'], ['eps']), (['S'], ['a']), (['S'], ['A', 'B'])]
+Chomsky normal form: True
+
+
+ ***  Pretty output  *** 
+
+
+Start terminal is: S
+
+Terminals are:
+), b, (, a
+
+Nonterminals are:
+S, B, A
+
+Rules are:
+S -> eps
+S -> a
+S -> AB
+
+Grammar is in Chomsky normal form

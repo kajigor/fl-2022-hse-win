@@ -1,0 +1,4 @@
+start{S};
+nonterminals{S} -> eps;
+nonterminals{S} -> terminals{a};
+nonterminals{S} -> nonterminals{A, B};

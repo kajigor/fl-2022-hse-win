@@ -1,0 +1,9 @@
+start{S};
+
+nonterminals{S} -> nonterminals{S} terminals{(} nonterminals{S} terminals{)}; 
+
+nonterminals{S}    ->       terminals{(} nonterminals{S} terminals{)} nonterminals{S};
+
+nonterminals{S} -> terminals{(, (, (, (, (, ), ), ), ), )};
+
+nonterminals{S} -> eps;
