@@ -30,17 +30,17 @@ tokens = [
 
 def t_TERM(t):
   r'\$.+?\$'
-  t.value = str(t.value[1:-1])
+  t.value = replace_escape_symbols(str(t.value[1:-1]))
   return t
 
 def t_NONTERM(t):
   r'<.+?>'
-  t.value = str(t.value[1:-1])
+  t.value = replace_escape_symbols(str(t.value[1:-1]))
   return t
 
 def t_BEGIN(t):
   r'@<.+>;'
-  t.value = str(t.value[2:-2])
+  t.value = replace_escape_symbols(str(t.value[2:-2]))
   return t
 
 t_TO = r'->' 
