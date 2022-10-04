@@ -1,9 +1,9 @@
 Start: 
 S
 NonTerminals: 
-A
-T
 S
+T
+A
 Terminals: 
 b
 a
@@ -13,3 +13,4 @@ S to aT
 TA to bTa
 aA to Aa
 T to ba
+grammar not in Chomsky normal form

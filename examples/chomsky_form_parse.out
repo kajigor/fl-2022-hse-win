@@ -1,0 +1,15 @@
+Start: 
+S
+NonTerminals: 
+B
+S
+A
+Terminals: 
+b
+a
+Rules: 
+S to AB
+S to eps
+A to a
+B to b
+grammar in Chomsky normal form

@@ -3,9 +3,10 @@ PSP
 NonTerminals: 
 PSP
 Terminals: 
-(
 )
+(
 Rules: 
 PSP to (PSP)
 PSP to eps
 PSP to PSPPSP
+grammar not in Chomsky normal form

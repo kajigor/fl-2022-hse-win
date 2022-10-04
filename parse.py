@@ -43,8 +43,26 @@ class Grammar:
             for term in rule[1]:
                 res += str(term)
             res += '\n'
+        if self.check_normal():
+            res += 'grammar in Chomsky normal form'
+        else:
+            res += 'grammar not in Chomsky normal form'
         return res
+    
 
+    def check_normal(self):
+        for rule in self.rules:
+            if len(rule[0]) > 1:
+                return False
+            if rule[0][0] not in self.nonterminals:
+                return False
+            if len(rule[1]) > 2:
+                return False
+            if len(rule[1]) == 1 and rule[1][0] != 'eps' and rule[1][0] not in self.terminals:
+                return False
+            elif len(rule[1]) == 2 and (rule[1][0] not in self.nonterminals or rule[1][1] not in self.nonterminals):
+                return False
+        return True
 
 grammar = Grammar()
 

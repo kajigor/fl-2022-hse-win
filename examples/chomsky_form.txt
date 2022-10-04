@@ -1,0 +1,5 @@
+set_start S;
+n'S'n to n'A'n n'B'n;
+n'S'n to eps;
+n'A'n to t'a't;
+n'B'n to t'b't;
