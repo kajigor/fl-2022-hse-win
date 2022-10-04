@@ -1,44 +1,52 @@
 import ply.lex as lex
 import sys
 
-# 1 + 2 * x123 + if x then 31 else 42
+def replace_escape_symbols(a : str) -> str:
+  a = a.replace("\$", "$")
+  a = a.replace("\<", "<")
+  a = a.replace("\>", ">")
+  a = a.replace("\@", "@")
+  a = a.replace("\_", "_")
+  a = a.replace("\|", "|")
+  a = a.replace("\;", ";")
+  a = a.replace("\\\\", "\\")
+  return a
+
 
 reserved = {
-  'if': 'IF',
-  'then': 'THEN',
-  'else': 'ELSE'
+  ';': 'SEP',
+  '@': 'START',
+  '_': 'EPS',
+  '|' : 'OR'
 }
 
 tokens = [
-  'NUM',
-  'PLUS',
-  'MINUS',
-  'MULT',
-  'DIV',
-  'POW',
-  'ID',
-  'LBR',
-  'RBR'
+  'TERM',
+  'NONTERM',
+  'BEGIN',
+  'TO'
 ] + list(reserved.values())
 
-def t_ID(t):
-  r'[a-z_][a-z_0-9]*'
-  t.type = reserved.get(t.value, 'ID')
+
+def t_TERM(t):
+  r'\$.+?\$'
+  t.value = str(t.value[1:-1])
   return t
 
-def t_NUM(t):
-  r'[0-9]+'
-  t.value = int(t.value)
+def t_NONTERM(t):
+  r'<.+?>'
+  t.value = str(t.value[1:-1])
   return t
 
-t_PLUS = r'\+'
-t_MINUS = r'\-'
-t_MULT = r'\*'
-t_DIV = r'\/'
-t_POW = r'\*\*'
-t_LBR = r'\('
-t_RBR = r'\)'
+def t_BEGIN(t):
+  r'@<.+>;'
+  t.value = str(t.value[2:-2])
+  return t
 
+t_TO = r'->' 
+t_SEP = r';'  
+t_EPS = r'_'
+t_OR = r'\|'
 t_ignore = ' \t'
 
 def t_newline(t):
@@ -52,14 +60,16 @@ def t_error(t):
 lexer = lex.lex()
 
 def main():
-  lexer = lex.lex()
-  lexer.input(sys.argv[1])
-
-  while True:
-    tok = lexer.token()
-    if not tok:
-      break
-    print(tok)
+	lexer = lex.lex()
+	filename = sys.argv[1]
+	with open(filename, 'r') as FIN:
+		with open(filename + ".out", 'w') as FOUT:
+			lexer.input("".join(FIN.readlines()))
+			while True:
+				tok = lexer.token()
+				if not tok:
+					break
+				FOUT.write(str(tok) + '\n')
 
 if __name__ == "__main__":
     main()
