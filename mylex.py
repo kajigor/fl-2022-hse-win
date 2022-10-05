@@ -56,7 +56,7 @@ lexer = lex.lex()
 def main():
     lexer = lex.lex()
     infile = sys.argv[1]
-    outfile = infile.replace(".in", ".out")
+    outfile = infile + ".out"
     with open(infile, 'r') as lang, open(outfile, 'w') as result:
         for line in lang:
             lexer.input(line)
