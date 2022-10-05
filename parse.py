@@ -1,49 +1,221 @@
 import ply.yacc as yacc
 import sys
+from functools import reduce
+import pathlib
 
-from typing import Set
+from typing import Set, List, Union
+from dataclasses import dataclass
 
 from lex import tokens
 
 
+# Bind : NONTERMINAL EQ Enumeration
+
+# Enumeration : Enumeration PIPE Sequence
+#             | Sequence
+
+# Sequence : Single
+#          | Sequence Single
+
+# Single : NONTERMINAL
+#        | TERMINAL
+#        | EMPTY
+
+
+def removesuffix(input_string, suffix):
+    if suffix and input_string.endswith(suffix):
+        return input_string[:-len(suffix)]
+    return input_string
+
+
+@dataclass
 class Terminal:
     data: str
 
+    def output(self) -> str:
+        result = "Terminal(" + self.data + ")"
+        return result
 
+
+@dataclass
 class NonTerminal:
     data: str
 
+    def output(self) -> str:
+        result = "NonTerminal(" + self.data + ")"
+        return result
 
-class Start:
-    data: str
 
-
+@dataclass
 class Empty:
-    data: str
+    def output(self) -> str:
+        result = "Empty"
+        return result
 
 
+Single = Union[NonTerminal, Terminal, Empty]
+
+
+@dataclass
+class Sequence:
+    data: List[Single]
+
+    def output(self) -> str:
+        result = "Sequence("
+        for item in self.data.data:
+            result += item.output() + " ,"
+        result = removesuffix(result, " ,")
+        result += ")"
+        return result
+
+
+@dataclass
+class Enumeration:
+    data: List[Sequence]
+
+    def output(self) -> str:
+        result = "Enumeration("
+        for item in self.data.data:
+            result += item.output() + ", "
+        result = removesuffix(result, ", ")
+        result += ")"
+        return result
+
+
+@dataclass
+class Bind:
+    source: NonTerminal
+    description: Enumeration
+
+    def output(self) -> str:
+        result = self.source.output() + " = "
+        result += self.description.output()
+        return result
+
+
+@dataclass
+class Rules:
+    data: List[Bind]
+
+
+@dataclass
 class Grammar:
-    data: [Set[Terminal], Set[NonTerminal], Start, Empty]
+    terminals: Set[str]
+    nonterminals: Set[str]
+    start: str
+    binds: List[Bind]
+
+    def output(self) -> str:
+        result = "Grammar's description:\n"
+        result += "Start: " + self.start + "\n"
+        result += "Terminals: "
+        for terminal in self.terminals:
+            result += terminal + ", "
+        result = removesuffix(result, ", ")
+        result += "\n"
+        result += "NonTerminals: "
+        for nonterminal in self.nonterminals:
+            result += nonterminal + ", "
+        result = removesuffix(result, ", ")
+        result += "\n"
+        result += "Rules:\n"
+        for rule in self.binds:
+            result += rule.output() + "\n"
+        return result
 
 
-def p_initial(p):
-    'initial : start'
-    Start.data = p[1]
+def get_terminals(variant: Union[Enumeration, Sequence, Single]) -> Set[str]:
+    if isinstance(variant, Terminal):
+        return {variant.data}
+    res = set()
+    if isinstance(variant, Enumeration):
+        for seq in variant.data.data:
+            res.union(get_terminals(seq))
+    if isinstance(variant, Sequence):
+        for sin in variant.data.data:
+            res.union(get_terminals(sin))
+    return res
+
+
+def get_nonterminals(variant: Union[Enumeration, Sequence, Single]) -> Set[str]:
+    if isinstance(variant, NonTerminal):
+        return {variant.data}
+    res = set()
+    if isinstance(variant, Enumeration):
+        for seq in variant.data.data:
+            res.union(get_nonterminals(seq))
+    if isinstance(variant, Sequence):
+        for sin in variant.data.data:
+            res.union(get_nonterminals(sin))
+    return res
+
+
+def grammar(start: str, rules: Rules) -> Grammar:
+    binds = Rules.data.data
+    terminals = set()
+    nonterminals = set()
+    for bind in binds:
+        terminals.union(get_terminals(bind.description))
+        nonterminals.add(bind.source.data)
+        nonterminals.union(get_nonterminals(bind.description))
+    return Grammar(terminals, nonterminals, start, binds)
+
+
+def p_grammar(p):
+    'grammars : START Rules'
+    p[0] = grammar(p[1], p[2])
+
+
+def p_rules(p):
+    """Rules : Bind
+             | Rules Bind"""
+    if len(p) == 3:
+        p[0] = p[1].data + [p[2]]
+    else:
+        p[0] = [p[1]]
+
+
+def p_bind(p):
+    'Bind : NONTERMINAL EQ Enumeration'
+    p[0] = Bind(NonTerminal(p[1]), Enumeration(p[3]))
+
+
+def p_enumeration(p):
+    """Enumeration : Enumeration PIPE Sequence
+                   | Sequence"""
+    if len(p) == 2:
+        p[0] = Enumeration([Sequence(p[1])])
+    else:
+        p[0] = Enumeration(p[1].data + [Sequence(p[3])])
+
+
+def p_sequence(p):
+    """Sequence : Single
+                | Sequence Single"""
+    if len(p) == 2:
+        p[0] = Sequence([p[1]])
+    else:
+        p[0] = Sequence(p[1].data + [p[2]])
 
 
 def p_empty(p):
-    'empty :'
-    pass
+    'Single : EMPTY'
+    p[0] = Empty()
 
 
 def p_terminal(p):
-    pass
+    'Single : TERMINAL'
+    p[0] = Terminal(p[1])
+
+
+def p_nonterminal(p):
+    'Single : NONTERMINAL'
+    p[0] = NonTerminal(p[1])
 
 
 def p_error(p):
-    if p == None:
+    if p is None:
         token = "end of file"
-        p.error()
     else:
         token = f"{p.type}({p.value}) on line {p.lineno}"
 
@@ -58,43 +230,12 @@ def main():
     input_file = str(sys.argv[1])
     output_file = input_file + ".out"
 
-    with open(input_file, "r") as input, open(output_file, "w") as output:
-        parser = yacc.yacc(start="initial")
-        result = parser.parse("".join(input.readlines()))
-        print(result, file=output)
+    with open(input_file, "r") as f_input, open(output_file, "w") as f_output:
+        parser = yacc.yacc(start="grammars")
+        grammars = parser.parse("".join(f_input.readlines()))
+        print(grammars.output(), file=f_output)
 
 
 if __name__ == "__main__":
     main()
 
-# def p_expr_plus(p):
-#   'expr : expr PLUS term'
-#   p[0] = p[1] + p[3]
-
-# def p_expr_minus(p):
-#   'expr : expr MINUS term'
-#   p[0] = p[1] - p[3]
-
-# def p_expr_term(p):
-#   'expr : term'
-#   p[0] = p[1]
-
-# def p_term_mult(p):
-#   'term : term MULT factor'
-#   p[0] = p[1] * p[3]
-
-# def p_term_div(p):
-#   'term : term DIV factor'
-#   p[0] = p[1] / p[3]
-
-# def p_term_factor(p):
-#   'term : factor'
-#   p[0] = p[1]
-
-# def p_factor_num(p):
-#   'factor : NUM'
-#   p[0] = p[1]
-
-# def p_factor_br(p):
-#   'factor : LBR expr RBR'
-#   p[0] = p[2]

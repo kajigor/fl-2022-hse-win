@@ -1,0 +1,6 @@
+Grammar's description:
+Start: S
+Terminals: Terminal(z)
+NonTerminals: NonTerminal(S)
+Rules:
+NonTerminal(S) = Enumeration(Sequence(Terminal(z)), Sequence(NonTerminal(E)))
