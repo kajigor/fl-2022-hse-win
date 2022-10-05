@@ -50,16 +50,19 @@ def t_error(t):
 lexer = lex.lex()
 
 
-def main():
-    sys.stdout = open(sys.argv[1] + '.out', mode='w')
-    lexer = lex.lex()
-    lexer.input(open(sys.argv[1], mode='r').read())
+def lex_from_file(file):
+    sys.stdout = open(file + '.out', mode='w')
+    lexer.input(open(file, mode='r').read())
 
     while True:
         tok = lexer.token()
         if not tok:
             break
         print(tok)
+
+
+def main():
+    lex_from_file(sys.argv[1])
 
 
 if __name__ == "__main__":

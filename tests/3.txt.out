@@ -1,8 +1,22 @@
+LexToken(START,'=>',11,0)
+LexToken(NON_TERM,'S',11,3)
+LexToken(RULE,'->',11,7)
+LexToken(NON_TERM,'& A &',11,10)
+LexToken(NON_TERM,'  B \\',11,20)
+LexToken(TERM,' test with @ and & ',11,29)
+LexToken(NON_TERM,'& A &',12,53)
+LexToken(RULE,'->',12,63)
+LexToken(TERM,'Yet ',12,66)
+LexToken(NON_TERM,'  B \\',13,73)
+LexToken(RULE,'->',13,82)
+LexToken(TERM,'another ',13,85)
+
 Start non-terminal:
 	'S'
 
 Non-terminals:
 	'  B \'
+	'S'
 	'& A &'
 
 Terminals:

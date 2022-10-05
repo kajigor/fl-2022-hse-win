@@ -1,3 +1,24 @@
+LexToken(START,'=>',1,0)
+LexToken(NON_TERM,'S',1,3)
+LexToken(RULE,'->',1,7)
+LexToken(TERM,'',1,10)
+LexToken(NON_TERM,'S',2,13)
+LexToken(RULE,'->',2,17)
+LexToken(TERM,'a',2,20)
+LexToken(NON_TERM,'S',3,24)
+LexToken(RULE,'->',3,28)
+LexToken(TERM,'b',3,31)
+LexToken(NON_TERM,'S',4,35)
+LexToken(RULE,'->',4,39)
+LexToken(TERM,'a',4,42)
+LexToken(NON_TERM,'S',4,46)
+LexToken(TERM,'a',4,50)
+LexToken(NON_TERM,'S',5,54)
+LexToken(RULE,'->',5,58)
+LexToken(TERM,'b',5,61)
+LexToken(NON_TERM,'S',5,65)
+LexToken(TERM,'b',5,69)
+
 Start non-terminal:
 	'S'
 

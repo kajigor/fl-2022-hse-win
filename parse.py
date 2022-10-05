@@ -69,6 +69,7 @@ def p_rule_left(p):
         p[0] = p[2]
     else:
         p[0] = p[1]
+    grammar.non_terms.add(p[0])
 
 
 def p_tokens(p):
@@ -107,11 +108,16 @@ def p_error(p):
 parser = yacc.yacc()
 
 
-def main():
-    with open(sys.argv[1], mode='r') as inp:
+def parse_from_file(file):
+    grammar.clear()
+    with open(file, mode='r') as inp:
         for line in inp.readlines():
             parser.parse(line)
-    open(sys.argv[1] + '.out', mode='w').write(str(grammar))
+    return str(grammar)
+
+
+def main():
+    open(sys.argv[1] + '.out', mode='w').write(parse_from_file(sys.argv[1]))
 
 
 if __name__ == "__main__":

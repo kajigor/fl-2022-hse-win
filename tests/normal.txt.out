@@ -1,16 +1,36 @@
+LexToken(NON_TERM,'A',25,0)
+LexToken(RULE,'->',25,4)
+LexToken(NON_TERM,'B',25,7)
+LexToken(NON_TERM,'C',25,11)
+LexToken(NON_TERM,'B',26,15)
+LexToken(RULE,'->',26,19)
+LexToken(TERM,'b',26,22)
+LexToken(START,'=>',27,26)
+LexToken(NON_TERM,'S',27,29)
+LexToken(RULE,'->',27,33)
+LexToken(NON_TERM,'A',27,36)
+LexToken(NON_TERM,'D',27,40)
+LexToken(NON_TERM,'D',28,44)
+LexToken(RULE,'->',28,48)
+LexToken(TERM,'d',28,51)
+LexToken(NON_TERM,'C',29,55)
+LexToken(RULE,'->',29,59)
+LexToken(TERM,'c',29,62)
+
 Start non-terminal:
 	'S'
 
 Non-terminals:
-	'A'
-	'B'
 	'C'
 	'D'
+	'A'
+	'B'
+	'S'
 
 Terminals:
-	'c'
-	'b'
 	'd'
+	'b'
+	'c'
 
 Rules:
 	'A' -> 'B' 'C'
