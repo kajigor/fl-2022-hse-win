@@ -1,0 +1,7 @@
+LexToken(START_NON_TERM,'S',1,0)
+LexToken(EQ,'=',1,4)
+LexToken(TERM,'(',1,6)
+LexToken(START_NON_TERM,'S',1,9)
+LexToken(TERM,')',1,12)
+LexToken(END,';',1,15)
+Illegal character 'E'

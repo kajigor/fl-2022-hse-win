@@ -1,0 +1,9 @@
+<S> = <expr>;
+<expr> = <expr> '+' <term>;
+<expr> = <expr> '-' <term>;
+<expr> = <term>;
+<term> = <term> '*' <elem>;
+<term> = <term> '/' <elem>;
+<term> = <elem>;
+<elem> = '(' <expr> ')';
+<elem> = 'x';
