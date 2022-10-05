@@ -1,0 +1,22 @@
+Start non-terminal:
+	'S'
+
+Non-terminals:
+	'A'
+	'B'
+	'C'
+	'D'
+
+Terminals:
+	'c'
+	'b'
+	'd'
+
+Rules:
+	'A' -> 'B' 'C'
+	'B' -> 'b'
+	'S' -> 'A' 'D'
+	'D' -> 'd'
+	'C' -> 'c'
+
+Grammar is in Chomsky normal form

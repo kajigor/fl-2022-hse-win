@@ -1,0 +1,17 @@
+Start non-terminal:
+	'S'
+
+Non-terminals:
+	'S'
+
+Terminals:
+	''
+	')'
+	']'
+	'['
+	'('
+
+Rules:
+	'S' -> 'S' 'S' | '(' 'S' ')' | '[' 'S' ']' | ''
+
+Grammar is not in Chomsky normal form

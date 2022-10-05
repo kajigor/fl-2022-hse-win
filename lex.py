@@ -6,12 +6,10 @@ tokens = [
     'TERM',
     'NON_TERM',
     'RULE',
-    'SEP'
 ]
 
 t_RULE = r'\->'
 t_START = r'=>'
-t_SEP = r';'
 
 escapes = {'\@': '@',
            '\&': '&',

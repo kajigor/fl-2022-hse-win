@@ -1,0 +1,18 @@
+Start non-terminal:
+	'S'
+
+Non-terminals:
+	'  B \'
+	'& A &'
+
+Terminals:
+	'another '
+	' test with @ and & '
+	'Yet '
+
+Rules:
+	'S' -> '& A &' '  B \' ' test with @ and & '
+	'& A &' -> 'Yet '
+	'  B \' -> 'another '
+
+Grammar is not in Chomsky normal form

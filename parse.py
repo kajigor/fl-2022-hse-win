@@ -17,11 +17,13 @@ class ContextFreeGrammar:
         self.start = st
 
     def __str__(self):
-        res = "Start non-terminal:\n\t" + self.start + '\n'
-        res += "Non-terminals:\n\t" + "\n\t".join(self.non_terms) + '\n'
-        res += "Terminals:\n\t" + "\n\t".join(self.terms) + '\n'
-        res += "Rules:\n\t" + "\n\t".join(
-                [l + '->' + ' | '.join([''.join(i) for i in r]) for l, r in self.rules])
+        res = "Start non-terminal:\n\t'" + self.start + "'\n\n"
+        res += "Non-terminals:\n\t'" + "'\n\t'".join(self.non_terms) + "'\n\n"
+        res += "Terminals:\n\t'" + "'\n\t'".join(self.terms) + "'\n\n"
+        res += "Rules:\n\t'" + "'\n\t'".join([l + "' -> '" + "' | '".join(["' '".join(i) for i in r])
+                                              for l, r in self.rules.items()]) + "'\n\n"
+        res += "Grammar is " + ("" if self.check_form() else "not ") + "in Chomsky normal form\n"
+        return res
 
     def clear(self):
         self.terms.clear()
@@ -29,31 +31,32 @@ class ContextFreeGrammar:
         self.non_terms.clear()
         self.start = ''
 
+    def check_form(self):
+        for nt, rs in self.rules.items():
+            for ts in rs:
+                if len(ts) > 2:
+                    return False
+                if len(ts) == 1 and ts[0] not in self.terms:
+                    return False
+                if len(ts) == 2 and (ts[0] not in self.non_terms or ts[1] not in self.non_terms):
+                    return False
+                if "" in ts and ts != self.start:
+                    return False
+        return True
+
 
 grammar = ContextFreeGrammar()
 
 
-# grammar : rule SEP grammar | rule
 # rule : rule_left RULE tokens
 # rule_left : START NON_TERM | NON_TERM
 # tokens : token tokens | token
 # token : NON_TERM | TERM
 
-
-def p_grammar(p):
-    '''
-        grammar : rule SEP grammar
-                | rule
-    '''
-    if len(p) == 4:
-        p[0] = (p[1], p[3])
-    else:
-        p[0] = p[1]
-
-
 def p_rule(p):
     'rule : rule_left RULE tokens'
-    grammar.rules[p[1]] = grammar.rules.get(p[1], []) + [p[4]]
+    grammar.rules[p[1]] = grammar.rules.get(p[1], []) + [p[3]]
+    p[0] = (p[1], p[3])
 
 
 def p_rule_left(p):
@@ -63,7 +66,9 @@ def p_rule_left(p):
     '''
     if len(p) == 3:
         grammar.set_start(p[2])
-    p[0] = p[-1]
+        p[0] = p[2]
+    else:
+        p[0] = p[1]
 
 
 def p_tokens(p):
@@ -103,7 +108,9 @@ parser = yacc.yacc()
 
 
 def main():
-    parser.parse(open(sys.argv[1], mode='r').read())
+    with open(sys.argv[1], mode='r') as inp:
+        for line in inp.readlines():
+            parser.parse(line)
     open(sys.argv[1] + '.out', mode='w').write(str(grammar))
 
 
