@@ -5,7 +5,6 @@ import ply.yacc as yacc
 from lex import tokens
 
 """
-begin : START BIND NTERM END_OF_RULE rules
 rules : rule
       | rules rule
 rule : NTERM BIND one_more END_OF_RULE
