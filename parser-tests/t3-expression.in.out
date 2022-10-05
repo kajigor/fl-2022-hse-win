@@ -1,0 +1,12 @@
+Start non-terminal: $expr$
+Non-terminals: ['$expr$', '$num$']
+Terminals: {'#2#', '#3#', '#8#', '#7#', '#+#', '#0#', '#6#', '#1#', '#9#', '#-#', '#4#', '#5#'}
+Rules: {
+
+	$start$ --> [$expr$]
+
+	$expr$ --> [$expr$ #+# $num$  | $expr$ #-# $num$  | $num$]
+
+	$num$ --> [$num$ $num$  | #0#  | #1#  | #2#  | #3#  | #4#  | #5#  | #6#  | #7#  | #8#  | #9#]
+
+}

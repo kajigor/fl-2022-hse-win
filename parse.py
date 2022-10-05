@@ -1,125 +1,233 @@
+from dataclasses import dataclass
+from sys import argv, path
+from typing import List, Set, Union
 import ply.yacc as yacc
-
 from lex import tokens
 
-precedence = (
-  ('left', 'PLUS', 'MINUS'),
-  ('left', 'MULT', 'DIV'),
-  ('right', 'POW')
-)
+"""
+begin : START BIND NTERM END_OF_RULE rules
+rules : rule
+      | rules rule
+rule : NTERM BIND one_more END_OF_RULE
+one_more : multiple
+         | multiple OR one_more
+multiple : single
+         | multiple SEP single
+single : TERM
+       | NTERM
+       | EPSILON
+"""
 
-# Dangling-else problem
-# if 0 then (if 1 then 777) else 9
-# if : IF expr THEN if ELSE if
-#    | IF expr THEN if
-#    | expr
-# expr : expr + expr
-#      | expr - expr
-#      | expr * expr
-#      | expr / expr
-#      | NUM
-#      | LBR expr RBR
+isStart = False
+Start: str = None
 
-def p_if(p):
-  '''if : IF expr THEN LBR if RBR ELSE LBR if RBR
-        | IF expr THEN LBR if RBR
-        | expr
-  '''
-  if len(p) == 11:
-    p[0] = p[5] if p[2] == 0 else p[9]
-  else:
-    if len(p) == 7:
-      p[0] = p[5] if p[2] == 0 else 9999999999999
+@dataclass
+class Terminal:
+    name: str
+
+
+@dataclass
+class NonTerminal:
+    name: str
+
+
+@dataclass
+class Start:
+    name: str
+
+
+@dataclass
+class Empty:
+    name = ""
+
+
+@dataclass
+class Single:
+    value: Union[Empty, NonTerminal, Terminal]
+
+
+@dataclass
+class Multiple:
+    values: List[Single]
+
+    def append(self, other):
+        self.values.append(other)
+
+    def to_string(self):
+        res = ""
+
+        for single in self.values:
+            res += single.value.name + " "
+
+        res.strip()
+        return res
+
+
+@dataclass
+class OneMore:
+    values: List[Multiple]
+
+    def append(self, other):
+        self.values.append(other)
+
+    def to_string(self):
+        res = ""
+
+        for multiple in self.values:
+            res += multiple.to_string() + " | "
+
+        res = res.strip(" |")
+        return res
+
+
+@dataclass
+class Rule:
+    nt: NonTerminal
+    mapsto: List[OneMore]
+
+    def to_string(self):
+        res = "\t" + self.nt.name + " --> ["
+        for repeated in self.mapsto:
+            res += repeated.to_string() + ","
+
+        res = res.strip(" ,")
+        res += "]"
+
+        return res
+
+
+RULES: List[Rule] = []
+
+
+def p_rules(p):
+    """
+    rules : rule
+          | rules rule
+    """
+    if len(p) == 2:
+        p[0] = p[1]
     else:
-      p[0] = p[1]
+        p[1].append(p[2])
+        p[0] = p[1]
 
-def p_expr_plus(p):
-  'expr : expr PLUS expr'
-  p[0] = p[1] + p[3]
 
-def p_expr_minus(p):
-  'expr : expr MINUS expr'
-  p[0] = p[1] - p[3]
+def p_rule(p):
+    "rule : NTERM BIND one_more END_OF_RULE"
+    
+    rule = Rule(NonTerminal(p[1]), [p[3]])
+    RULES.append(rule)
+    p[0] = rule
 
-def p_expr_mult(p):
-  'expr : expr MULT expr'
-  p[0] = p[1] * p[3]
 
-def p_expr_div(p):
-  'expr : expr DIV expr'
-  p[0] = p[1] / p[3]
+def p_one_more(p):
+    """
+    one_more : multiple
+             | one_more OR multiple
+    """
+    if len(p) == 2:
+        p[0] = OneMore([p[1]])
+    else:
+        p[1].append(p[3])
+        p[0] = p[1]
 
-def p_expr_pow(p):
-  'expr : expr POW expr'
-  p[0] = p[1] ** p[3]
 
-def p_expr_num(p):
-  'expr : NUM'
-  p[0] = p[1]
+def p_multiple(p):
+    """
+    multiple : single
+             | multiple SEP single
+    """
+    if len(p) == 2:
+        p[0] = Multiple([p[1]])
+    else:
+        p[1].append(p[3])
+        p[0] = p[1]
 
-def p_expr_br(p):
-  'expr : LBR expr RBR'
-  p[0] = p[2]
+
+def p_single_t(p):
+    """
+    single : TERM
+    """
+    p[0] = Single(Terminal(p[1]))
+
+
+def p_single_nt(p):
+    """
+    single : NTERM
+    """
+
+    global Start, isStart
+    if not isStart:
+        Start = p[1]
+        isStart = True
+
+    p[0] = Single(NonTerminal(p[1]))
+
+
+def p_single_e(p):
+    """
+    single : EPSILON
+    """
+    p[0] = Single(Empty())
+
+
+def extract_terminals() -> Set[str]:
+    terminals = set()
+
+    for rule in RULES:
+        for repeated in rule.mapsto:
+            for values in repeated.values:
+                for single in values.values:
+                    if isinstance(single.value, Terminal):
+                        terminals.add(single.value.name)
+
+    return terminals
+
+
+def extract_non_terminals() -> Set[str]:
+    nterminals = set()
+
+    for rule in RULES:
+        if (rule.nt.name != "$start$"): 
+            nterminals.add(rule.nt.name)
+
+        for repeated in rule.mapsto:
+            for values in repeated.values:
+                for single in values.values:
+                    if isinstance(single.value, NonTerminal):
+                        nterminals.add(single.value.name)
+
+    return nterminals
+
+
+global parser
+
 
 def p_error(p):
-  if p == None:
-    token = "end of file"
-    parser.errok()
-  else:
-    token = f"{p.type}({p.value}) on line {p.lineno}"
+    if p == None:
+        token = "end of file"
+        parser.errok()
+    else:
+        token = f"{p.type}({p.value}) on line {p.lineno}"
 
-  print(f"Syntax error: Unexpected {token}")
+    print(f"Syntax error: Unexpected {token}")
+
+
+parser = yacc.yacc()
+
 
 def main():
-  parser = yacc.yacc()
+    with open(argv[1], "r") as grammar, open(argv[1] + ".out", "w") as result:
+        file = grammar.readlines()
+        for line in file:
+            parser.parse(line)
+        print(f"Start non-terminal: {Start}", file=result)
+        print(f"Non-terminals: {extract_non_terminals()}", file=result)
+        print(f"Terminals: {extract_terminals()}", file=result)
+        print("Rules: {\n", file=result)
+        for rule in RULES:
+            print(rule.to_string() + "\n", file=result)
+        print("}", file=result)
 
-  while True:
-    try:
-      s = input("calc> ")
-    except EOFError:
-      break
-    if not s:
-      continue
-    result=parser.parse(s)
-    print(result)
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-# def p_expr_plus(p):
-#   'expr : expr PLUS term'
-#   p[0] = p[1] + p[3]
-
-# def p_expr_minus(p):
-#   'expr : expr MINUS term'
-#   p[0] = p[1] - p[3]
-
-# def p_expr_term(p):
-#   'expr : term'
-#   p[0] = p[1]
-
-# def p_term_mult(p):
-#   'term : term MULT factor'
-#   p[0] = p[1] * p[3]
-
-# def p_term_div(p):
-#   'term : term DIV factor'
-#   p[0] = p[1] / p[3]
-
-# def p_term_factor(p):
-#   'term : factor'
-#   p[0] = p[1]
-
-# def p_factor_num(p):
-#   'factor : NUM'
-#   p[0] = p[1]
-
-# def p_factor_br(p):
-#   'factor : LBR expr RBR'
-#   p[0] = p[2]
-
-
