@@ -5,7 +5,7 @@ from tkinter import Variable
 import ply.yacc as yacc
 
 from dataclasses import dataclass
-from typing import List, Set, Union
+from typing import List, Sequence, Set, Union
 from functools import reduce
 from lexer import tokens
 
@@ -136,6 +136,7 @@ Non-terminals: {sorted(self.non_terminals)}
 Start: {self.ast.start.to_string()}
 Rules:
 {self.ast.ruleset.to_string()}
+Chomsky normal form: {is_chomsky_normal_form(self)}
         """
 
 # Parsing
@@ -250,6 +251,46 @@ def get_non_terminals(ast: Root) -> Set[NonTerminal]:
             for single in multiple.values:
                 if (isinstance(single.object, NonTerminal)):
                     result.add(single.object.value)
+    return result
+
+def is_empty(expr: Union[Multiple, Single, Description]) -> bool:
+    print("is_empty(): ", expr)
+    if isinstance(expr, Single):
+        return isinstance(expr, Empty)
+
+    if isinstance(expr, Multiple):
+        return all(map(is_empty, expr.values))
+
+    if isinstance(expr, Description):
+        return any(map(is_empty, expr.values))
+
+def is_correct_combination_values(object, start) -> bool:
+    print("is_correct_combination_values(): ", object, start)
+    return isinstance(object, NonTerminal) and object.value != start
+
+def is_correct_chomsky_value(start: str, expr: Union[Multiple, Single, Description]) -> bool:
+    print("is_correct_chomsky_value(): ", start, expr)
+    if isinstance(expr, Single):
+        return not isinstance(expr.object, NonTerminal)
+
+    if isinstance(expr, Multiple):
+        if (len(expr.values) == 1):
+            return is_correct_chomsky_value(start, expr.values[0])
+        
+        return len(expr.values) == 2 \
+            and is_correct_combination_values(expr.values[0].object, start) \
+            and is_correct_combination_values(expr.values[1].object, start)
+
+    if isinstance(expr, Description):
+        return all(map(lambda value: is_correct_chomsky_value(start, value), expr.values))
+
+def is_chomsky_normal_form(grammar: Grammar) -> bool:
+    if any(map(lambda rule: rule.variable.value != grammar.ast.start.variable.value and is_empty(rule.desc), grammar.ast.ruleset.rules)):
+        print("is_chomsky_normal_form(): ", False)
+        return False
+
+    result: bool = all(map(lambda rule : is_correct_chomsky_value(grammar.ast.start.variable.value, rule.desc), grammar.ast.ruleset.rules))
+    print("is_chomsky_normal_form(): ", result)
     return result
 
 parser = yacc.yacc()
