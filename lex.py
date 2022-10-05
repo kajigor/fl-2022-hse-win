@@ -1,65 +1,74 @@
 import ply.lex as lex
 import sys
 
-# 1 + 2 * x123 + if x then 31 else 42
-
-reserved = {
-  'if': 'IF',
-  'then': 'THEN',
-  'else': 'ELSE'
-}
-
 tokens = [
-  'NUM',
-  'PLUS',
-  'MINUS',
-  'MULT',
-  'DIV',
-  'POW',
-  'ID',
-  'LBR',
-  'RBR'
-] + list(reserved.values())
+    'TERMINAL',
+    'NON_TERMINAL',
+    'START_TOKEN',
+    'LINE_SEPARATOR'
+]
 
-def t_ID(t):
-  r'[a-z_][a-z_0-9]*'
-  t.type = reserved.get(t.value, 'ID')
-  return t
+terminals = set()
+nonTerminals = set()
 
-def t_NUM(t):
-  r'[0-9]+'
-  t.value = int(t.value)
-  return t
 
-t_PLUS = r'\+'
-t_MINUS = r'\-'
-t_MULT = r'\*'
-t_DIV = r'\/'
-t_POW = r'\*\*'
-t_LBR = r'\('
-t_RBR = r'\)'
+def t_TOKEN(t):
+    r'[^\n\s\t\r]+'
+    if t.lexer.lineno == 1:
+        t.type = 'TERMINAL'
+        terminals.add(t.value)
+    elif t.lexer.lineno == 2:
+        t.type = 'NON_TERMINAL'
+        nonTerminals.add(t.value)
+    elif t.lexer.lineno == 3:
+        t.type = 'START_TOKEN'
+    else:
+        if t.value in terminals:
+            t.type = 'TERMINAL'
+        elif t.value in nonTerminals:
+            t.type = 'NON_TERMINAL'
+        else:
+            print('Illegal token: \'' + t.value + '\' on line ' + str(t.lexer.lineno))
+            exit(0)
+
+    t.value = t.value.replace('\\t', '\t')
+    t.value = t.value.replace('\\n', '\n')
+    t.value = t.value.replace('\\s', ' ')
+    t.value = t.value.replace('\\h', '\\')
+    return t
+
 
 t_ignore = ' \t'
 
+
 def t_newline(t):
-  r'\n+'
-  t.lexer.lineno += len(t.value)
+    r'\n+'
+    t.type = 'LINE_SEPARATOR'
+    t.lexer.lineno += len(t.value)
+    return t
+
 
 def t_error(t):
-  print("Illegal character '%s'" % t.value[0])
-  t.lexer.skip(1)
+    print("Illegal character '%s'" % t.value[0])
+    exit(0)
+
 
 lexer = lex.lex()
 
-def main():
-  lexer = lex.lex()
-  lexer.input(sys.argv[1])
 
-  while True:
-    tok = lexer.token()
-    if not tok:
-      break
-    print(tok)
+def main():
+    filename = sys.argv[1]
+    output = open(filename + '.out', 'w+')
+    data = open(filename).read()
+    lexer.input(data)
+
+    while True:
+        tok = lexer.token()
+        if not tok:
+            break
+        output.write(str(tok))
+        output.write('\n')
+
 
 if __name__ == "__main__":
     main()
