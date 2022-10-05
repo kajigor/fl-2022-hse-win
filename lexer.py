@@ -47,12 +47,15 @@ def t_NONTERMINAL(t):
 lexer = lex.lex()
 def main():
   lexer = lex.lex()
-  lexer.input(sys.argv[1])
+  rfile = open(sys.argv[1])
+  input = rfile.read()
+  lexer.input(input)
+  wfile = open(sys.argv[1] + ".out", 'w')
   while True:
     tok = lexer.token()
     if not tok:
       break
-    print(tok)
+    wfile.write(str(tok) + '\n')
 
 if __name__ == "__main__":
     main()

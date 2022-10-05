@@ -1,0 +1,6 @@
+Grammar
+Start non-terminal: S
+Terminals: a, b
+Non-terminals: S
+Rules: S->b, S->aSa, S->a, S->bSb
+grammar is not in Chomsky normal form
