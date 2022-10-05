@@ -25,10 +25,10 @@ Non-terminals:
 
 Terminals:
 	''
+	')'
 	'('
 	'['
 	']'
-	')'
 
 Rules:
 	'S' -> 'S' 'S' | '(' 'S' ')' | '[' 'S' ']' | ''

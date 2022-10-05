@@ -22,10 +22,10 @@ Start non-terminal:
 
 Non-terminals:
 	'C'
-	'D'
 	'A'
-	'B'
+	'D'
 	'S'
+	'B'
 
 Terminals:
 	'd'

@@ -15,14 +15,14 @@ Start non-terminal:
 	'S'
 
 Non-terminals:
+	'& A &'
 	'  B \'
 	'S'
-	'& A &'
 
 Terminals:
 	'another '
-	' test with @ and & '
 	'Yet '
+	' test with @ and & '
 
 Rules:
 	'S' -> '& A &' '  B \' ' test with @ and & '

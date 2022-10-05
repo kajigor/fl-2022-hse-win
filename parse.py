@@ -17,7 +17,11 @@ class ContextFreeGrammar:
         self.start = st
 
     def __str__(self):
-        res = "Start non-terminal:\n\t'" + self.start + "'\n\n"
+        res = ""
+        if self.start != '':
+            res += "Start non-terminal:\n\t'" + self.start + "'\n\n"
+        else:
+            res += "Error: start non-terminal not specified!\n\n"
         res += "Non-terminals:\n\t'" + "'\n\t'".join(self.non_terms) + "'\n\n"
         res += "Terminals:\n\t'" + "'\n\t'".join(self.terms) + "'\n\n"
         res += "Rules:\n\t'" + "'\n\t'".join([l + "' -> '" + "' | '".join(["' '".join(i) for i in r])
