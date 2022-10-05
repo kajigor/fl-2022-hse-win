@@ -153,7 +153,6 @@ def p_root(p):
     """
         Root : Start Ruleset
     """
-    print(f"p_root(): create Root({p[1]}, {p[2]})")
     p[0] = Root(p[1], p[2])
 
 
@@ -161,7 +160,6 @@ def p_start(p):
     """
         Start : START
     """
-    print(f"p_start(): create Start({p[1]})")
     p[0] = Start(NonTerminal(p[1]))
 
 
@@ -171,10 +169,8 @@ def p_ruleset(p):
                 | Ruleset Rule
     """
     if (len(p) == 2):
-        print(f"p_ruleset(): {p[1]}")
         p[0] = Ruleset([p[1]])
     else:
-        print(f"p_ruleset(): {p[1]}, {p[2]}")
         p[1].append(p[2])
         p[0] = p[1]
 
@@ -182,7 +178,6 @@ def p_rule(p):
     """
         Rule : NON_TERMINAL ARROW Description END
     """
-    print(f"p_rule(): {p[1]}, {p[2]}, {p[3]}, {p[4]}")
     p[0] = Rule(NonTerminal(p[1]), p[3])
 
 def p_description(p):
@@ -191,10 +186,8 @@ def p_description(p):
                     | Description SEPARATOR Multiple
     """
     if (len(p) == 2):
-        print(f"p_description(): {p[1]}")
         p[0] = Description([p[1]])
     else:
-        print(f"p_description(): {p[1]}, {p[2]}, {p[3]}")
         p[1].append(p[3])
         p[0] = p[1]
 
@@ -204,10 +197,8 @@ def p_multiple(p):
                  | Multiple Single
     """
     if (len(p) == 2):
-        print(f"p_multiple(): {p[1]}")
         p[0] = Multiple([p[1]])
     else:
-        print(f"p_multiple(): {p[1]}, {p[2]}")
         p[1].append(p[2])
         p[0] = p[1]
 
@@ -254,7 +245,6 @@ def get_non_terminals(ast: Root) -> Set[NonTerminal]:
     return result
 
 def is_empty(expr: Union[Multiple, Single, Description]) -> bool:
-    print("is_empty(): ", expr)
     if isinstance(expr, Single):
         return isinstance(expr, Empty)
 
@@ -265,11 +255,9 @@ def is_empty(expr: Union[Multiple, Single, Description]) -> bool:
         return any(map(is_empty, expr.values))
 
 def is_correct_combination_values(object, start) -> bool:
-    print("is_correct_combination_values(): ", object, start)
     return isinstance(object, NonTerminal) and object.value != start
 
 def is_correct_chomsky_value(start: str, expr: Union[Multiple, Single, Description]) -> bool:
-    print("is_correct_chomsky_value(): ", start, expr)
     if isinstance(expr, Single):
         return not isinstance(expr.object, NonTerminal)
 
@@ -286,11 +274,9 @@ def is_correct_chomsky_value(start: str, expr: Union[Multiple, Single, Descripti
 
 def is_chomsky_normal_form(grammar: Grammar) -> bool:
     if any(map(lambda rule: rule.variable.value != grammar.ast.start.variable.value and is_empty(rule.desc), grammar.ast.ruleset.rules)):
-        print("is_chomsky_normal_form(): ", False)
         return False
 
     result: bool = all(map(lambda rule : is_correct_chomsky_value(grammar.ast.start.variable.value, rule.desc), grammar.ast.ruleset.rules))
-    print("is_chomsky_normal_form(): ", result)
     return result
 
 parser = yacc.yacc()
