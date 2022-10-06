@@ -48,7 +48,7 @@ def t_error(t):
     global error, output_file
     print(f"Lexical error in '%s' at line {t.lexer.lineno}" % t.value[0], file=output_file)
     t.lexer.skip(len(t.value))
-
+    error = True
 
 
 lexer = lex.lex()
