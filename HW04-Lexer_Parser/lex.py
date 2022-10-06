@@ -1,7 +1,3 @@
-"""
-
-"""
-
 import sys
 import os
 import ply
@@ -33,9 +29,9 @@ t_ignore = " \t"
 def __include_symbols(value: str) -> str:
     return (
         value.replace("\\&", "&")
-             .replace("\\@", "@")
-             .replace("\\~", "~")
-             .replace("\\\\", "\\")
+        .replace("\\@", "@")
+        .replace("\\~", "~")
+        .replace("\\\\", "\\")
     )
 
 
@@ -51,8 +47,7 @@ def t_START(t: ply.lex.LexToken):
 
 
 def t_error(t: ply.lex.LexToken):
-    print(f"Illegal character '{t.value[0]}'.")
-    raise TokenError
+    raise TokenError(f"Syntax error: Illegal character '{t.value[0]}'.")
 
 
 def t_TERMINAL(t: ply.lex.LexToken):
@@ -80,7 +75,7 @@ def main():
     file_path = os.path.abspath(sys.argv[1])
 
     with open(file_path, "r", encoding="utf-8") as read_lang, open(
-            file_path + ".out", "w"
+        file_path + ".out", "w"
     ) as write_lang:
         for line in read_lang.readlines():
             lexer.input(line.rstrip())
@@ -89,8 +84,8 @@ def main():
 
                 try:
                     token = lexer.token()
-                except TokenError:
-                    exit("File is invalid ...")
+                except TokenError as e:
+                    exit(*e.args)
 
                 if not token:
                     break

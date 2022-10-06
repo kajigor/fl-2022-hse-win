@@ -1,0 +1,7 @@
+GRAMMAR
+
+Non terminals: S
+Terminals: ['a']
+Start: S
+
+S -> aSa | a | %%%%%
