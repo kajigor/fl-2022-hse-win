@@ -10,3 +10,4 @@ Rules: {
 	 A --> [  ]
 
 }
+The grammar is in Chomsky Normal Form: False

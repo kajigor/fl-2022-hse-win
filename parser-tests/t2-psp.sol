@@ -12,3 +12,4 @@ Rules: {
 	 S --> [  ]
 
 }
+The grammar is in Chomsky Normal Form: False

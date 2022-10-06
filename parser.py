@@ -1,3 +1,4 @@
+from audioop import mul
 from dataclasses import dataclass
 from sys import argv
 from typing import List, Set
@@ -204,6 +205,34 @@ def extract_non_terminals() -> Set[str]:
     return nterminals
 
 
+def isNonTerminal(who):
+    return isinstance(who, NonTerminal)
+
+
+def isTerminal(who):
+    return isinstance(who, Terminal)
+
+
+def isEmpty(who):
+    return isinstance(who, Empty)
+
+
+def is_chomsky_form():
+    for rule in RULES:
+        if (rule.nt.name == "start"): continue
+        for multiple in rule.mapsto.values:
+            values = multiple.values
+            length = len(values)
+            if length > 2:
+                return False
+            if length == 2 and not (isNonTerminal(values[0].value) and isNonTerminal(values[0].value)):
+                return False
+            if length == 1 and not ((isTerminal(values[0].value)) or (isEmpty(values[0].value) and rule.nt.name == Start)):
+                print(isEmpty(values[0].value), rule.nt.name)
+                return False
+    return True
+
+
 global parser
 
 
@@ -232,6 +261,7 @@ def main():
         for rule in RULES:
             print(rule.to_string() + "\n", file=result)
         print("}", file=result)
+        print('The grammar is in Chomsky Normal Form:', is_chomsky_form(), file=result)
 
 
 if __name__ == "__main__":
