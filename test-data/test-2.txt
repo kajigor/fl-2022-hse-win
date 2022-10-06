@@ -1,5 +1,5 @@
 initial_not_terminal=«S»
-«S» -> ⌊a$⌋ «S» ⌊a⌋
-«S» -> ⌊b⌋ «S» ⌊b⌋
-«S» -> EPS
-«not_» -> ⌊literal⌋
+«S» -> ⌊a$⌋ «S» ⌊a⌋;
+«S» -> ⌊b⌋ «S» ⌊b⌋;
+«S» -> EPS;
+«not_» -> ⌊literal⌋;

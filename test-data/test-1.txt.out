@@ -3,42 +3,49 @@ LexToken(NOT_TERMINAL,'Start',2,0)
 LexToken(IMPLICATION,'->',2,8)
 LexToken(TERMINAL,'a$%^Q#fdsa',2,11)
 LexToken(NOT_TERMINAL,'$#!@FDASFDS',2,24)
+LexToken(SEPARATOR,';',2,37)
 LexToken(NOT_TERMINAL,'Start',3,0)
 LexToken(IMPLICATION,'->',3,8)
 LexToken(TERMINAL,'b',3,11)
 LexToken(NOT_TERMINAL,'S',3,15)
 LexToken(TERMINAL,'b',3,19)
+LexToken(SEPARATOR,';',3,22)
 LexToken(NOT_TERMINAL,'$#!@FDASFDS',4,0)
 LexToken(IMPLICATION,'->',4,14)
 LexToken(TERMINAL,'foo',4,17)
 LexToken(TERMINAL,'bar',4,23)
 LexToken(NOT_TERMINAL,'$#!@FDASFDS',4,29)
+LexToken(SEPARATOR,';',4,42)
 LexToken(NOT_TERMINAL,'$#!@FDASFDS',5,0)
 LexToken(IMPLICATION,'->',5,14)
 LexToken(EPSILON,'EPS',5,17)
+LexToken(SEPARATOR,';',5,20)
 LexToken(NOT_TERMINAL,'S',6,0)
 LexToken(IMPLICATION,'->',6,4)
 LexToken(NOT_TERMINAL,'not_strange_name',6,7)
+LexToken(SEPARATOR,';',6,25)
 LexToken(NOT_TERMINAL,'S',7,0)
 LexToken(IMPLICATION,'->',7,4)
 LexToken(EPSILON,'EPS',7,7)
+LexToken(SEPARATOR,';',7,10)
 LexToken(NOT_TERMINAL,'not_strange_name',8,0)
 LexToken(IMPLICATION,'->',8,19)
 LexToken(TERMINAL,'terminal',8,22)
+LexToken(SEPARATOR,';',8,32)
 
 
 Начальный нетерминал: Start
 Терминалы:
+	terminal
+	b
 	a$%^Q#fdsa
 	foo
 	bar
-	b
-	terminal
 Нетерминалы:
 	Start
-	$#!@FDASFDS
-	S
 	not_strange_name
+	S
+	$#!@FDASFDS
 Правила КС грамматики:
 	Start --->  a$%^Q#fdsa$#!@FDASFDS
 	Start --->  bSb

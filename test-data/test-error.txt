@@ -1,0 +1,2 @@
+initial_not_terminal=«Sta->rt»
+«Sta->rt» -> ;

@@ -3,8 +3,8 @@ import sys
 
 from lex import tokens
 
-# RULE : NOT_TERMINAL IMPLICATION ONE_MORE
-#      | INIT_TOKEN IMPLICATION ONE_MORE
+# RULE : NOT_TERMINAL IMPLICATION ONE_MORE SEPARATOR
+#      | INIT_TOKEN IMPLICATION ONE_MORE SEPARATOR
 # INIT_TOKEN : INITIAL
 # ONE_MORE : EPSILON ONE_MORE
 # ONE_MORE : TERMINAL ONE_MORE
@@ -19,11 +19,11 @@ rules = []
 initial = None
 output_file = None
 find_init = False
-
+error = False
 
 def p_RULE(p):
-    '''RULE : NOT_TERMINAL IMPLICATION ONE_MORE
-          | INIT_TOKEN IMPLICATION ONE_MORE '''
+    '''RULE : NOT_TERMINAL IMPLICATION ONE_MORE SEPARATOR
+          | INIT_TOKEN IMPLICATION ONE_MORE SEPARATOR'''
     p[0] = [p[1], p[3]]
     global find_init, initial
     if not find_init:
@@ -41,12 +41,12 @@ def p_init(p):
 
 
 def p_ONE_MORE_EPSILON(p):
-    'ONE_MORE : EPSILON ONE_MORE'
+    'ONE_MORE : EPSILON ONE_MORE '
     p[0] = p[2]
 
 
 def p_ONE_MORE_TERMINAL(p):
-    'ONE_MORE : TERMINAL ONE_MORE'
+    'ONE_MORE : TERMINAL ONE_MORE '
     global terminals
     terminals.add(p[1])
     p[0] = p[1] + p[2]
@@ -79,27 +79,29 @@ def p_ONE_MORE_ONE_NOT_TERMINAL(p):
 def p_error(p):
     if not p is None:
         print(f"Lexical error in '%s' at line {p.lineno}" % p.value[0], file=output_file)
-
+        global error
+        error = True
 
 parser = yacc.yacc()
 
 
 def main():
     file = open(sys.argv[1], 'r')
-    global output_file
+    global output_file, error
     output_file = open(sys.argv[1] + ".out", 'w')
     for line in file:
         parser.parse(line)
-    print("Начальный нетерминал: " + initial, file=output_file)
-    print("Терминалы:", file=output_file)
-    for terminal in terminals:
-        print('\t' +terminal, file=output_file)
-    print("Нетерминалы:", file=output_file)
-    for not_terminal in not_terminals:
-        print('\t' + not_terminal, file=output_file)
-    print("Правила КС грамматики:", file=output_file)
-    for rule in rules:
-        print('\t' + rule[0] + " --->  " + rule[1], file=output_file)
+    if not error:
+        print("Начальный нетерминал: " + initial, file=output_file)
+        print("Терминалы:", file=output_file)
+        for terminal in terminals:
+            print('\t' +terminal, file=output_file)
+        print("Нетерминалы:", file=output_file)
+        for not_terminal in not_terminals:
+            print('\t' + not_terminal, file=output_file)
+        print("Правила КС грамматики:", file=output_file)
+        for rule in rules:
+            print('\t' + rule[0] + " --->  " + rule[1], file=output_file)
     output_file.close()
 
 

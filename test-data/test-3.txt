@@ -1,8 +1,8 @@
 initial_not_terminal=«A»
-«A» -> ⌊a⌋ «A»
-«A» -> ⌊a⌋ «B»
-«B» -> ⌊b⌋ «B» ⌊a⌋
-«B» -> ⌊b⌋ «C»
-«B» -> «stra1n\ge\\\_name»
-«C» -> EPS
-«stra1n\ge\\\_name» -> EPS
+«A» -> ⌊a⌋ «A»;
+«A» -> ⌊a⌋ «B»;
+«B» -> ⌊b⌋ «B» ⌊a⌋;
+«B» -> ⌊b⌋ «C»;
+«B» -> «stra1n\ge\\\_name»;
+«C» -> EPS;
+«stra1n\ge\\\_name» -> EPS;
