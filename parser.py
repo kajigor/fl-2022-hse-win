@@ -1,33 +1,44 @@
 from dataclasses import dataclass
-from sys import argv, path
-from typing import List, Set, Union
+from sys import argv
+from typing import List, Set
 import ply.yacc as yacc
 from lex import tokens
 
 """
-rules : rule
-      | rules rule
-rule : NTERM BIND one_more END_OF_RULE
+rules    : rule
+         | rules rule
+
+rule     : NTERM BIND one_more END_OF_RULE
+
 one_more : multiple
          | multiple OR one_more
+
 multiple : single
          | multiple SEP single
-single : TERM
-       | NTERM
-       | EPSILON
+
+single   : TERM
+         | NTERM
+         | EPSILON
 """
 
 isStart = False
-Start: str = None
+Start: str | None = None
+
 
 @dataclass
 class Terminal:
     name: str
 
+    def __init__(self, name: str):
+        self.name = name.strip("#")
+
 
 @dataclass
 class NonTerminal:
     name: str
+
+    def __init__(self, name: str):
+        self.name = name.strip("$")
 
 
 @dataclass
@@ -42,7 +53,7 @@ class Empty:
 
 @dataclass
 class Single:
-    value: Union[Empty, NonTerminal, Terminal]
+    value:  Empty | NonTerminal | Terminal
 
 
 @dataclass
@@ -58,7 +69,7 @@ class Multiple:
         for single in self.values:
             res += single.value.name + " "
 
-        res.strip()
+        res = res.strip()
         return res
 
 
@@ -82,15 +93,10 @@ class OneMore:
 @dataclass
 class Rule:
     nt: NonTerminal
-    mapsto: List[OneMore]
+    mapsto: OneMore
 
     def to_string(self):
-        res = "\t" + self.nt.name + " --> ["
-        for repeated in self.mapsto:
-            res += repeated.to_string() + ","
-
-        res = res.strip(" ,")
-        res += "]"
+        res = f"\t {self.nt.name} --> [ {self.mapsto.to_string()} ]"
 
         return res
 
@@ -112,8 +118,8 @@ def p_rules(p):
 
 def p_rule(p):
     "rule : NTERM BIND one_more END_OF_RULE"
-    
-    rule = Rule(NonTerminal(p[1]), [p[3]])
+
+    rule = Rule(NonTerminal(p[1]), p[3])
     RULES.append(rule)
     p[0] = rule
 
@@ -154,12 +160,14 @@ def p_single_nt(p):
     single : NTERM
     """
 
+    nt = NonTerminal(p[1])
+
     global Start, isStart
     if not isStart:
-        Start = p[1]
+        Start = nt.name
         isStart = True
 
-    p[0] = Single(NonTerminal(p[1]))
+    p[0] = Single(nt)
 
 
 def p_single_e(p):
@@ -173,11 +181,10 @@ def extract_terminals() -> Set[str]:
     terminals = set()
 
     for rule in RULES:
-        for repeated in rule.mapsto:
-            for values in repeated.values:
-                for single in values.values:
-                    if isinstance(single.value, Terminal):
-                        terminals.add(single.value.name)
+        for values in rule.mapsto.values:
+            for single in values.values:
+                if isinstance(single.value, Terminal):
+                    terminals.add(single.value.name)
 
     return terminals
 
@@ -186,11 +193,10 @@ def extract_non_terminals() -> Set[str]:
     nterminals = set()
 
     for rule in RULES:
-        if (rule.nt.name != "$start$"): 
+        if (rule.nt.name != "start"):
             nterminals.add(rule.nt.name)
 
-        for repeated in rule.mapsto:
-            for values in repeated.values:
+            for values in rule.mapsto.values:
                 for single in values.values:
                     if isinstance(single.value, NonTerminal):
                         nterminals.add(single.value.name)
@@ -220,8 +226,8 @@ def main():
         for line in file:
             parser.parse(line)
         print(f"Start non-terminal: {Start}", file=result)
-        print(f"Non-terminals: {extract_non_terminals()}", file=result)
-        print(f"Terminals: {extract_terminals()}", file=result)
+        print(f"Non-terminals: {sorted(extract_non_terminals())}", file=result)
+        print(f"Terminals: {sorted(extract_terminals())}", file=result)
         print("Rules: {\n", file=result)
         for rule in RULES:
             print(rule.to_string() + "\n", file=result)
