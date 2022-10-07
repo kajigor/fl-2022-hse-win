@@ -1,7 +1,7 @@
-start=$A
-$S -> $lb $B;
-$A -> $lb $B | NULL;
-$B -> $S  $C | $rb $S | ')';
-$C -> $rb $S | ')';
-$lb -> '(';
-$rb -> ')';
+start=$A$
+$S$ -> $lb$ $B$;
+$A$ -> $lb$ $B$ | NULL;
+$B$ -> $S$  $C$ | $rb$ $S$ | ')';
+$C$ -> $rb$ $S$ | ')';
+$lb$ -> '(';
+$rb$ -> ')';

@@ -1,6 +1,6 @@
 -- Grammar -- 
 
-Terminals: {'(', ')'}
+Terminals: {')', '('}
 
 Non-terminals: {'e$cap\\e'}
 
