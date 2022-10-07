@@ -27,3 +27,4 @@ cabal.project.local~
 example/
 parser.out
 parsetab.py
+**/.vscode/
