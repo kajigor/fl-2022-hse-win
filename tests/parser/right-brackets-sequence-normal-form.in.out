@@ -2,7 +2,7 @@
 
 Terminals: {'(', ')'}
 
-Non-terminals: {'rb', 'C', 'B', 'S', 'lb'}
+Non-terminals: {'lb', 'S', 'C', 'B', 'rb'}
 
 Start: 'A'
 

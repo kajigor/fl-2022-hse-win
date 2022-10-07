@@ -1,8 +1,8 @@
 -- Grammar -- 
 
-Terminals: {'/', '(', ')', '0', '3', '*', '1', '+', '-', '2'}
+Terminals: {'/', '2', '*', '+', '-', '(', '3', ')', '1', '0'}
 
-Non-terminals: {'expr', 'mult', 'term'}
+Non-terminals: {'term', 'mult', 'expr'}
 
 Start: 'expr'
 

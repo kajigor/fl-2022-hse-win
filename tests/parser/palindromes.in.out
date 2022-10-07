@@ -1,6 +1,6 @@
 -- Grammar -- 
 
-Terminals: {'a', 'b'}
+Terminals: {'b', 'a'}
 
 Non-terminals: {'S'}
 
