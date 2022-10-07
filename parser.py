@@ -160,7 +160,7 @@ def is_correct_combination_values(value, start) -> bool:
 
 
 def is_correct_chomsky_value(start: str, expr:Union[Combination, Alt, Entity]) -> bool:
-    if isinstance(expr, Entity):
+    if isinstance(expr, Terminal) or isinstance(expr, NonTerminal) or isinstance(expr, Null):
         return not isinstance(expr, NonTerminal) # Null or Terminal -> true
 
 
@@ -175,7 +175,7 @@ def is_correct_chomsky_value(start: str, expr:Union[Combination, Alt, Entity]) -
 
 
 def is_null(expr : Union[Combination, Alt, Entity]) -> bool:
-    if isinstance(expr, Entity):
+    if isinstance(expr, Terminal) or isinstance(expr, NonTerminal) or isinstance(expr, Null):
         return isinstance(expr, Null)
 
     if isinstance(expr, Combination):
