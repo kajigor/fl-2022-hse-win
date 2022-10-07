@@ -1,7 +1,7 @@
 from audioop import mul
 from dataclasses import dataclass
 from sys import argv
-from typing import List, Set
+from typing import List, Set, Union
 import ply.yacc as yacc
 from lex import tokens
 
@@ -23,7 +23,7 @@ single   : TERM
 """
 
 isStart = False
-Start: str | None = None
+Start: Union[str, None] = None
 
 
 @dataclass
@@ -54,7 +54,7 @@ class Empty:
 
 @dataclass
 class Single:
-    value:  Empty | NonTerminal | Terminal
+    value:  Union[Empty, NonTerminal, Terminal]
 
 
 @dataclass
