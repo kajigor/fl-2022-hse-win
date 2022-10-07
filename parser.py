@@ -37,16 +37,14 @@ class Null:
     pass
 
 
-
 Entity = Union[Terminal, NonTerminal, Null]
-
 
 
 @dataclass
 class Combination:
     values: List[Entity]
 
-    def to_string(self, tabs='') -> str:
+    def to_string(self, tabs="") -> str:
         result = "Combination(\n"
 
         for value in self.values:
@@ -56,12 +54,11 @@ class Combination:
         return result
 
 
-
 @dataclass
 class Alt:
     values: List[Union[Combination, Entity]]
 
-    def to_string(self, tabs='') -> str:
+    def to_string(self, tabs="") -> str:
         result = "Alt(\n"
         inner_tabs = tabs + "\t"
 
@@ -81,7 +78,7 @@ class Bind:
     name: str
     expr: Union[Alt, Combination, Entity]
 
-    def to_string(self, additional_tabs='') -> str:
+    def to_string(self, additional_tabs="") -> str:
         tabs = "\t" + additional_tabs
 
         result = f"{additional_tabs}Bind " + "{\n"
@@ -113,23 +110,22 @@ class Grammar:
         result += "Rules: {\n"
 
         for rule in self.rules:
-            result += rule.to_string('\t') + "\n"
+            result += rule.to_string("\t") + "\n"
 
         result += "}\n"
 
         return result
 
 
-
 def extract_terminals(expr: Union[Alt, Combination, Entity]) -> Set[str]:
     if isinstance(expr, Alt) or isinstance(expr, Combination):
         return reduce(
             lambda result, items: result.union(items),
-            map(extract_terminals, expr.values)
+            map(extract_terminals, expr.values),
         )
 
     if isinstance(expr, Terminal):
-        return { expr.value }
+        return {expr.value}
 
     if isinstance(expr, NonTerminal) or isinstance(expr, Null):
         return set()
@@ -141,11 +137,11 @@ def extract_non_terminals(expr: Union[Alt, Combination, Entity]) -> Set[str]:
     if isinstance(expr, Alt) or isinstance(expr, Combination):
         return reduce(
             lambda result, items: result.union(items),
-            map(extract_non_terminals, expr.values)
+            map(extract_non_terminals, expr.values),
         )
 
     if isinstance(expr, NonTerminal):
-        return { expr.value }
+        return {expr.value}
 
     if isinstance(expr, Terminal) or isinstance(expr, Null):
         return set()
@@ -153,29 +149,37 @@ def extract_non_terminals(expr: Union[Alt, Combination, Entity]) -> Set[str]:
     raise ValueError("Invalid expression provided!")
 
 
-
 def is_correct_combination_values(value, start) -> bool:
     return isinstance(value, NonTerminal) and value != start
 
 
-
-def is_correct_chomsky_value(start: str, expr:Union[Combination, Alt, Entity]) -> bool:
-    if isinstance(expr, Terminal) or isinstance(expr, NonTerminal) or isinstance(expr, Null):
-        return not isinstance(expr, NonTerminal) # Null or Terminal -> true
-
+def is_correct_chomsky_value(start: str, expr: Union[Combination, Alt, Entity]) -> bool:
+    if (
+        isinstance(expr, Terminal)
+        or isinstance(expr, NonTerminal)
+        or isinstance(expr, Null)
+    ):
+        return not isinstance(expr, NonTerminal)  # Null or Terminal -> true
 
     if isinstance(expr, Combination):
-        return len(expr.values) == 2 \
-               and is_correct_combination_values(expr.values[0], start) \
-               and is_correct_combination_values(expr.values[1], start)
+        return (
+            len(expr.values) == 2
+            and is_correct_combination_values(expr.values[0], start)
+            and is_correct_combination_values(expr.values[1], start)
+        )
 
     if isinstance(expr, Alt):
-        return all(map(lambda value: is_correct_chomsky_value(start, value), expr.values))
+        return all(
+            map(lambda value: is_correct_chomsky_value(start, value), expr.values)
+        )
 
 
-
-def is_null(expr : Union[Combination, Alt, Entity]) -> bool:
-    if isinstance(expr, Terminal) or isinstance(expr, NonTerminal) or isinstance(expr, Null):
+def is_null(expr: Union[Combination, Alt, Entity]) -> bool:
+    if (
+        isinstance(expr, Terminal)
+        or isinstance(expr, NonTerminal)
+        or isinstance(expr, Null)
+    ):
         return isinstance(expr, Null)
 
     if isinstance(expr, Combination):
@@ -185,39 +189,44 @@ def is_null(expr : Union[Combination, Alt, Entity]) -> bool:
         return any(map(is_null, expr.values))
 
 
-
-def is_chomsky_normal_form(grammar : Grammar) -> bool:
-    if any(map(lambda rule: rule.name != grammar.start and is_null(rule.expr), grammar.rules)):
+def is_chomsky_normal_form(grammar: Grammar) -> bool:
+    if any(
+        map(
+            lambda rule: rule.name != grammar.start and is_null(rule.expr),
+            grammar.rules,
+        )
+    ):
         return False
 
-    return all(map(lambda rule : is_correct_chomsky_value(grammar.start, rule.expr), grammar.rules))
+    return all(
+        map(
+            lambda rule: is_correct_chomsky_value(grammar.start, rule.expr),
+            grammar.rules,
+        )
+    )
 
 
-
-def construct_grammar(start : str, rules : List[Bind]) -> Grammar:
+def construct_grammar(start: str, rules: List[Bind]) -> Grammar:
     terminals = reduce(
         lambda result, current: result.union(current),
-        map(lambda bind: extract_terminals(bind.expr), rules)
+        map(lambda bind: extract_terminals(bind.expr), rules),
     )
 
     non_terminals = reduce(
         lambda result, current: result.union(current),
-        map(lambda bind: extract_non_terminals(bind.expr), rules)
+        map(lambda bind: extract_non_terminals(bind.expr), rules),
     )
 
     return Grammar(terminals, non_terminals, start, rules)
 
 
 def construct_alt(
-    left: Union[Alt, Combination, Entity],
-    right: Union[Combination, Entity]
+    left: Union[Alt, Combination, Entity], right: Union[Combination, Entity]
 ) -> Alt:
     if isinstance(left, Alt):
-        return Alt(left.values + [ right ])
+        return Alt(left.values + [right])
 
     return Alt([left, right])
-
-
 
 
 def construct_combination(
@@ -225,10 +234,9 @@ def construct_combination(
     right: Entity,
 ) -> Combination:
     if isinstance(left, Combination):
-        return Combination(left.values + [ right ])
+        return Combination(left.values + [right])
 
     return Combination([left, right])
-
 
 
 def p_grammar(p):
@@ -298,7 +306,6 @@ def p_error(p):
     exit()
 
 
-
 parser = yacc.yacc()
 
 
@@ -308,7 +315,7 @@ def main():
         with open(filepath, "r", encoding="utf-8") as code, open(
             filepath + ".out", "w", encoding="utf-8"
         ) as result:
-            grammar=parser.parse("".join(code.readlines()))
+            grammar = parser.parse("".join(code.readlines()))
             output = f"{grammar.to_string()}\nChomsky normal form: {is_chomsky_normal_form(grammar)}\n"
 
             print(output, file=result)

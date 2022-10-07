@@ -54,7 +54,6 @@ def remove_escape(string: str) -> str:
     return string.replace("\\$", "$").replace("\\\\", "\\")
 
 
-
 lexer = lex.lex()
 
 
