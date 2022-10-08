@@ -7,7 +7,8 @@ tokens = [
     'START',
     'EMPTY',
     'EQ',
-    'PIPE'
+    'PIPE',
+    'SEP'
 ]
 
 
@@ -32,6 +33,7 @@ def t_START(t):
 t_EQ = r'='
 t_PIPE = r'\|'
 t_EMPTY = r'EPS'
+t_SEP = r';'
 
 t_ignore = ' \t'
 

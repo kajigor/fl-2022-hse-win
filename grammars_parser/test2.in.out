@@ -1,8 +1,9 @@
 Grammar's description:
-Start: NonTerminal(EXPR)
-Terminals: Terminal(+), Terminal(-), Terminal(x)
-NonTerminals: NonTerminal(EXPR), NonTerminal(TERM), NonTerminal(NUM)
+Start: EXPR
+Terminals: 
+NonTerminals: NUM, EXPR, TERM
 Rules:
-NonTerminal(EXPR) = Enumeration(Sequence(NonTerminal(EXPR), Terminal(+), NonTerminal(Term)), Sequence(NonTerminal(EXPR), Terminal(-), NonTerminal(Term)), Sequence(NonTerminal(TERM)))
-NonTerminal(TERM) = NoNTerminal(NUM)
-NonTerminal(NUM) = Terminal(x)
+NonTerminal(EXPR) = Enumeration(Sequence(NonTerminal(EXPR), Terminal(+), NonTerminal(TERM)), Sequence(NonTerminal(EXPR), Terminal(-), NonTerminal(TERM)), Sequence(NonTerminal(TERM)))
+NonTerminal(TERM) = Enumeration(Sequence(NonTerminal(NUM)))
+NonTerminal(NUM) = Enumeration(Sequence(Terminal(x)))
+

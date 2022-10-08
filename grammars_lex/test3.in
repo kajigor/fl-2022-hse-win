@@ -1,2 +1,2 @@
 start=[START]
-[START]= `(`[START]`)` | EPS
+[START]= `(`[START]`)`[START] | EPS;

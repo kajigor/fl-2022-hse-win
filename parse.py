@@ -58,25 +58,25 @@ Single = Union[NonTerminal, Terminal, Empty]
 
 @dataclass
 class Sequence:
-    data: List[Single]
+    singles: List[Single]
 
     def output(self) -> str:
         result = "Sequence("
-        for item in self.data.data:
-            result += item.output() + " ,"
-        result = removesuffix(result, " ,")
+        for item in self.singles.singles:
+            result += item.output() + ", "
+        result = removesuffix(result, ", ")
         result += ")"
         return result
 
 
 @dataclass
 class Enumeration:
-    data: List[Sequence]
+    sequences: List[Sequence]
 
     def output(self) -> str:
         result = "Enumeration("
-        for item in self.data.data:
-            result += item.output() + ", "
+        for item in self.sequences:
+            result += Sequence(item).output() + ", "
         result = removesuffix(result, ", ")
         result += ")"
         return result
@@ -91,11 +91,6 @@ class Bind:
         result = self.source.output() + " = "
         result += self.description.output()
         return result
-
-
-@dataclass
-class Rules:
-    data: List[Bind]
 
 
 @dataclass
@@ -129,10 +124,10 @@ def get_terminals(variant: Union[Enumeration, Sequence, Single]) -> Set[str]:
         return {variant.data}
     res = set()
     if isinstance(variant, Enumeration):
-        for seq in variant.data.data:
+        for seq in variant.sequences:
             res.union(get_terminals(seq))
     if isinstance(variant, Sequence):
-        for sin in variant.data.data:
+        for sin in variant.singles:
             res.union(get_terminals(sin))
     return res
 
@@ -142,23 +137,22 @@ def get_nonterminals(variant: Union[Enumeration, Sequence, Single]) -> Set[str]:
         return {variant.data}
     res = set()
     if isinstance(variant, Enumeration):
-        for seq in variant.data.data:
+        for seq in variant.sequences:
             res.union(get_nonterminals(seq))
     if isinstance(variant, Sequence):
-        for sin in variant.data.data:
+        for sin in variant.singles:
             res.union(get_nonterminals(sin))
     return res
 
 
-def grammar(start: str, rules: Rules) -> Grammar:
-    binds = Rules.data.data
+def grammar(start: str, rules: List[Bind]) -> Grammar:
     terminals = set()
     nonterminals = set()
-    for bind in binds:
+    for bind in rules:
         terminals.union(get_terminals(bind.description))
         nonterminals.add(bind.source.data)
         nonterminals.union(get_nonterminals(bind.description))
-    return Grammar(terminals, nonterminals, start, binds)
+    return Grammar(terminals, nonterminals, start, rules)
 
 
 def p_grammar(p):
@@ -170,13 +164,13 @@ def p_rules(p):
     """Rules : Bind
              | Rules Bind"""
     if len(p) == 3:
-        p[0] = p[1].data + [p[2]]
+        p[0] = p[1] + [p[2]]
     else:
         p[0] = [p[1]]
 
 
 def p_bind(p):
-    'Bind : NONTERMINAL EQ Enumeration'
+    'Bind : NONTERMINAL EQ Enumeration SEP'
     p[0] = Bind(NonTerminal(p[1]), Enumeration(p[3]))
 
 
@@ -184,18 +178,18 @@ def p_enumeration(p):
     """Enumeration : Enumeration PIPE Sequence
                    | Sequence"""
     if len(p) == 2:
-        p[0] = Enumeration([Sequence(p[1])])
+        p[0] = [Sequence(p[1])]
     else:
-        p[0] = Enumeration(p[1].data + [Sequence(p[3])])
+        p[0] = p[1] + [Sequence(p[3])]
 
 
 def p_sequence(p):
     """Sequence : Single
                 | Sequence Single"""
     if len(p) == 2:
-        p[0] = Sequence([p[1]])
+        p[0] = [p[1]]
     else:
-        p[0] = Sequence(p[1].data + [p[2]])
+        p[0] = p[1] + [p[2]]
 
 
 def p_empty(p):
@@ -238,4 +232,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

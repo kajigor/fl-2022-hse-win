@@ -1,6 +1,8 @@
 Grammar's description:
 Start: S
-Terminals: Terminal(z)
-NonTerminals: NonTerminal(S)
+Terminals: 
+NonTerminals: S, E
 Rules:
 NonTerminal(S) = Enumeration(Sequence(Terminal(z)), Sequence(NonTerminal(E)))
+NonTerminal(E) = Enumeration(Sequence(Terminal(p)), Sequence(Terminal(q)), Sequence(NonTerminal(E)))
+

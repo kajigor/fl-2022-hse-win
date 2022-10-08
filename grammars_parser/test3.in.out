@@ -1,6 +1,7 @@
 Grammar's description:
-Start: NonTerminal(Start)
-Terminals: Terminal((), Terminal())
-NonTerminals: NonTerminal(START), NonTerminal(EPS)
+Start: START
+Terminals: 
+NonTerminals: START
 Rules:
-NonTerminal(START) = Enumeration(Sequence(Terminal((), NonTerminal(START), Terminal())), Sequence(NonTerminal(EPS)))
+NonTerminal(START) = Enumeration(Sequence(Terminal((), NonTerminal(START), Terminal()), NonTerminal(START)), Sequence(Empty))
+
