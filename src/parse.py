@@ -23,23 +23,19 @@ class OutputRule:
         result += self.sequence.pretty_print()
         return result
     
-    def check_only_epsilon(self) -> bool:
+    def check_epsilon(self, start) -> bool:
         for block in self.sequence.lst:
-            if len(block.lst) > 1 or block.lst[0].type != "EPS":
+            if (self.start_nonterm != start and len(block.lst) == 1 and block.lst[0].type == "EPS"):
                 return False
         return True 
     
-    def check_only_term(self):
+    def check_term_nterm(self):
         for block in self.sequence.lst:
-            if len(block.lst) > 1 or block.lst[0].type != "TERM":
+            if (len(block.lst) > 1 or block.lst[0].type != "TERM") and \
+                     (len(block.lst) != 2 or (block.lst[0].type != "NONTERM" and block.lst[1].type != "NONTERM")):
                 return False
         return True 
     
-    def check_nonterm_concat(self):
-        for block in self.sequence.lst:
-            if len(block.lst) != 2 or block.lst[0].type != "NONTERM" or block.lst[1].type != "NONTERM":
-                return False
-        return True 
 
 class CFG:
     def __init__(self, start: str, description: List[OutputRule]):
@@ -55,10 +51,9 @@ class CFG:
     
     def check_chomsky_form(self) -> bool:
         for output_rule in self.description:
-            if not any([output_rule.check_only_epsilon(), output_rule.check_only_term(),
-                       output_rule.check_nonterm_concat()]):
+            if not all([output_rule.check_epsilon(self.start), output_rule.check_term_nterm()]):
                 return False
-            return True
+        return True
 
 
 class NonTerminal:
