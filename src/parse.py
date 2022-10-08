@@ -31,8 +31,9 @@ class OutputRule:
     
     def check_term_nterm(self):
         for block in self.sequence.lst:
-            if (len(block.lst) > 1 or block.lst[0].type != "TERM") and \
-                     (len(block.lst) != 2 or (block.lst[0].type != "NONTERM" and block.lst[1].type != "NONTERM")):
+            if ((len(block.lst) == 1 and block.lst[0].type != "TERM" and block.lst[0].type != "EPS")) or \
+                     (len(block.lst) == 2 and (block.lst[0].type != "NONTERM" or block.lst[1].type != "NONTERM")) or \
+                     (len(block.lst) > 2):
                 return False
         return True 
     

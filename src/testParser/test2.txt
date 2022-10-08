@@ -1,4 +1,4 @@
 start (ABVC);
 (AC) -> (AD)(BD);
-(AC) -> eps;
+(ABVC) -> eps;
 (AC) -> [BD] | [CD];
