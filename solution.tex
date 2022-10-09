@@ -1,0 +1,182 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{graphicx} \usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{stmaryrd}
+\usepackage{caption}
+\usepackage{tikz}
+\usepackage{subcaption}
+\usepackage{imakeidx}
+\usepackage[russian]{cleveref}
+\usepackage{amssymb}
+\usepackage[a4paper,left=15mm,right=15mm,top=30mm,bottom=20mm]{geometry}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{textcomp}
+\parindent=0mm
+\parskip=3mm
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+% \lstset{frame=tb,
+% 	language=C++,
+% 	aboveskip=3mm,
+% 	belowskip=3mm,
+% 	showstringspaces=false,
+% 	columns=flexible,
+% 	basicstyle={\small\ttfamily},
+% 	numbers=none,
+% 	numberstyle=\tiny\color{gray},
+% 	keywordstyle=\color{blue},
+% 	commentstyle=\color{dkgreen},
+% 	stringstyle=\color{mauve},
+% 	breaklines=true,
+% 	breakatwhitespace=true,
+% 	tabsize=3
+% }
+
+\lstset{basicstyle=\footnotesize, columns=fullflexible}
+\lstdefinelanguage{Lambda}{%
+  % morekeywords={%
+  %   if,then,else,fix % keywords go here
+  % },%
+  % morekeywords={[2]int},   % types go here
+  % otherkeywords={:}, % operators go here
+  literate={% replace strings with symbols
+    {->}{{$\to$}}{2}
+    {to}{{$\to$}}{2}
+    {alpha}{{$\alpha$}}{2}
+    {beta}{{$\beta$}}{2}
+    {gamma}{{$\gamma$}}{2}
+    {lambda}{{$\lambda$}}{1}
+  },
+  % basicstyle={\sffamily},
+  % keywordstyle={\bfseries},
+  % keywordstyle={[2]\itshape}, % style for types
+  keepspaces,
+  mathescape % optional
+}[keywords,comments,strings]%
+
+\makeindex
+\pagestyle{empty}
+
+\title{Контрольная работа, Формальные языки}
+\author{Илья Малахов}
+\date{2022-10-09}
+
+
+
+\begin{document}
+	
+	\maketitle 
+    \newpage
+
+	%$\lim\limits_{n \shortrightarrow \inf} n$
+	\begin{enumerate}
+
+        \item % 1
+
+            \begin{lstlisting}[language=Lambda]
+            S -> aaaS'B
+
+            S' -> aaaS'B | $\varepsilon$
+
+            B -> b | bb
+            \end{lstlisting}
+
+            
+        \item % 2
+
+            \begin{lstlisting}[language=Lambda]
+            S -> aaaS'B -> aaaB -> aaab
+
+            S -> aaaS'B -> aaaB -> aaabb
+
+            S -> aaaS'B -> aaaaaaS'BB -> aaaaaaBB
+            \end{lstlisting}
+
+            aaabbb
+
+            aaabbaaaa
+
+        \item % 3
+
+            FIRST(S) = \{ a \}
+
+            FIRST(S') = \{ a, b, $\varepsilon$ \}
+
+            FIRST(B) = \{ b \}
+            \\
+
+            FOLLOW(S) = \{ \$ \}
+
+            FOLLOW(S') = \{ b \}
+
+            FOLLOW(B) = \{ b, \$ \}
+            \\
+
+            FIRST(B) $\bigcap$ FOLLOW(B) = \{ b \} $\neq \oslash$ 
+
+            LL(1) - анализ невозможен.
+
+        \item %4
+
+            Приведём грамматику в НФХ.
+
+            \begin{lstlisting}[language=Lambda]
+            S0 -> S
+
+            S -> $A_3$$S_b$
+
+            $S_b$ -> S'B | B
+
+            S' -> $A_3$$S_b$ 
+
+            B -> b | bb
+
+            $A_3$ -> A$A_2$
+
+            $A_2$ -> AA
+
+            A -> a
+
+            
+            \end{lstlisting}
+
+
+            aaaaaabb
+
+             \begin{tabular}{ |c|c|c|c|c|c|c|c| } 
+             \hline
+             a & a & a & a & a & a & b & b\\ 
+             \hline
+             \hline
+             A & A & A & A & A & A & B & B \\
+             \hline
+             $A_2$ & $A_2$ & $A_2$ & $A_2$ & $A_2$ &  & B &  \\
+             \hline
+             $A_3$ & $A_3$ & $A_3$ & $A_3$ &  &  &  &  \\
+             \hline
+              & &  & S' $S_b$ & & &  &  \\
+             \hline
+              &  &  & S' $S_b$ &  &  &  &  \\
+             \hline
+              &  &  &  & &  &  &  \\
+             \hline
+              S &  &  &  &  &  & &  \\
+             \hline
+            \end{tabular}           
+
+
+	\end{enumerate}
+
+\end{document}
+
+
+
+
+
+
