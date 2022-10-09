@@ -1,10 +1,6 @@
 import ply.lex as lex
 import sys
 
-reserved = {
-    'start': 'START',
-}
-
 tokens = [
     'TERMINAL',
     'NOT_TERMINAL',
