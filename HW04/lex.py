@@ -24,7 +24,7 @@ def remove_shields(exp):
 
 
 def t_START(t):
-    r'START\(\$(\S+(?<!(?!<\\)\\|\$))\);'
+    r'START\(\$.+?(?<!\\)\$\)'
     t.value = remove_shields(t.value[7:-2])
     return t
 
@@ -36,8 +36,8 @@ def t_TERM(t):
 
 
 def t_NON_TERM(t):
-    r'\$(\S+(?<!(?!<\\)\\|\$|;))'
-    t.value = remove_shields(t.value[1:])
+    r'\$.+?(?<!\\)\$'
+    t.value = remove_shields(t.value[1:-1])
     return t
 
 

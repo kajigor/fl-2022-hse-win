@@ -9,8 +9,9 @@ from lex import tokens
 #        | tokens token
 # union : tokens
 #       | union UNION tokens
-# start : START
-# rule : NON_TERM EQ union ENDL
+# expr : START ENDL
+#      | rule ENDL
+# rule : NON_TERM EQ union
 
 
 class Grammar:
@@ -29,7 +30,7 @@ class Grammar:
             result += rule[0] + " = "
             for i in range(len(rule[1])):
                 if i > 0:
-                    result += " \| "
+                    result += " | "
                 tokens = rule[1][i]
                 result += " ".join(tokens)
             result += "\n"
@@ -37,6 +38,43 @@ class Grammar:
 
 
 grammar = Grammar()
+
+
+def p_expr_start(p):
+    'expr : START ENDL'
+    p[0] = p[1]
+    grammar.start = p[0]
+
+
+def p_expr_rule(p):
+    'expr : rule ENDL'
+    p[0] = p[1]
+
+
+def p_rule(p):
+    'rule : NON_TERM EQ union'
+    p[0] = (p[1], p[3])
+    grammar.rules.append(p[0])
+
+
+def p_union_union_tokens(p):
+    'union : union UNION tokens'
+    p[0] = p[1] + [p[3]]
+
+
+def p_union_tokens(p):
+    'union : tokens'
+    p[0] = [p[1]]
+
+
+def p_tokens_tokens_token(p):
+    'tokens : tokens token'
+    p[0] = p[1] + [p[2]]
+
+
+def p_tokens_token(p):
+    'tokens : token'
+    p[0] = [p[1]]
 
 
 def p_token_term(p):
@@ -56,38 +94,6 @@ def p_token_eps(p):
     p[0] = p[1]
 
 
-def p_tokens_token(p):
-    'tokens : token'
-    p[0] = [p[1]]
-
-
-def p_tokens_tokens_token(p):
-    'tokens : tokens token'
-    p[0] = p[1] + [p[2]]
-
-
-def p_union_tokens(p):
-    'union : tokens'
-    p[0] = [p[1]]
-
-
-def p_union_union_tokens(p):
-    'union : union UNION tokens'
-    p[0] = p[1] + [p[2]]
-
-
-def p_rule(p):
-    'rule : NON_TERM EQ union ENDL'
-    p[0] = (p[1], p[3])
-    grammar.rules.append(p[0])
-
-
-def p_start_start(p):
-    'start : START'
-    p[0] = p[1]
-    grammar.start = p[0]
-
-
 def p_error(p):
     if p is None:
         print("Unexpected end of input")
@@ -102,9 +108,10 @@ def main():
 
         with open(filename, 'r') as fin, open(filename + ".out", "w") as fout:
             parser = yacc.yacc()
-            parser.parse("".join(fin.readlines()))
+            for line in fin.readlines():
+                parser.parse(line)
 
-            print(grammar.to_string(), file=fout)
+            print(grammar.to_string(), file=fout, end='')
 
 
 if __name__ == "__main__":
