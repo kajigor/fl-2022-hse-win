@@ -108,7 +108,9 @@ def p_error(p):
         print(f"Syntax error: Unexpected {p.type}({p.value}) on line {p.lineno}")
     exit(123)
 
-def test(parser):
+parser = yacc.yacc()
+
+def test():
     tests = ["arithmetic", "brackets", "palindromes"]
     for cur_test in tests:
         with open("tests_and_examples/" + cur_test + ".txt", "r") as f:
@@ -122,11 +124,8 @@ def test(parser):
                     assert lines[i] == lines1[i] + '\n'
                 grammar.clear()
 
-parser = yacc.yacc()
-
 def main():
-
-    test(parser)
+    test()
 
     with open(sys.argv[1], "r") as f:
         with open(sys.argv[1] + ".out", "w") as f1:
