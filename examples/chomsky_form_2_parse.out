@@ -5,11 +5,10 @@ B
 A
 S
 Terminals: 
-a
 b
 Rules: 
 S to AB
 S to eps
-A to a
+A to eps
 B to b
-grammar in Chomsky normal form
+grammar not in Chomsky normal form

@@ -3,8 +3,8 @@ PSP
 NonTerminals: 
 PSP
 Terminals: 
-)
 (
+)
 Rules: 
 PSP to (PSP)
 PSP to eps

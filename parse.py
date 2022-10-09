@@ -60,6 +60,8 @@ class Grammar:
                 return False
             if len(rule[1]) == 1 and rule[1][0] != 'eps' and rule[1][0] not in self.terminals:
                 return False
+            if len(rule[1]) == 1 and rule[1][0] == 'eps' and rule[0][0] != self.start:
+                return False
             elif len(rule[1]) == 2 and (rule[1][0] not in self.nonterminals or rule[1][1] not in self.nonterminals):
                 return False
         return True

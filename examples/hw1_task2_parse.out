@@ -1,12 +1,12 @@
 Start: 
 S
 NonTerminals: 
-S
-T
 A
+T
+S
 Terminals: 
-b
 a
+b
 Rules: 
 S to aSA
 S to aT
