@@ -122,8 +122,9 @@ def test(parser):
                     assert lines[i] == lines1[i] + '\n'
                 grammar.clear()
 
+parser = yacc.yacc()
+
 def main():
-    parser = yacc.yacc()
 
     test(parser)
 

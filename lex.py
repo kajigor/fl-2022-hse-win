@@ -39,8 +39,9 @@ def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
+lexer = lex.lex()
 
-def test(lexer):
+def test():
     tests = ["arithmetic", "brackets", "palindromes"]
     for cur_test in tests:
         with open("tests_and_examples/" + cur_test + ".txt", "r") as f:
@@ -59,11 +60,8 @@ def test(lexer):
                 for i in range(len(lines)):
                     assert lines[i] == lines1[i] + '\n'
                 lexer.lineno = 1
-
 def main():
-    lexer = lex.lex()
-
-    test(lexer)
+    test()
 
     with open(sys.argv[1], "r") as f:
         with open(sys.argv[1] + ".out", "w") as f1:
