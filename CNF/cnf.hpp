@@ -8,6 +8,9 @@
 #include <regex>
 #include <iostream>
 #include <fstream>
+#include <queue>
+#include <cmath>
+#include <set>
 
 namespace cnf_grammar {
 
@@ -18,7 +21,7 @@ namespace cnf_grammar {
 
     struct NonTerm {
         std::string name;
-        std::vector<int> productions; // indexes of rules
+        std::set<int> productions; // indexes of rules
         NonTerm (const std::string &s) : name(s) {}
     };
 
@@ -27,6 +30,7 @@ namespace cnf_grammar {
         bool hasEps = false; // may not contain epsilon
         int startID = 0;
         std::vector<std::vector<std::pair<ObjectType,int>>> rules; // one rule '('<S>')' consists of 3 elem-s
+        std::vector<int> L; // for each rule its left non-term
         std::vector<NonTerm> nonTerms;
         std::vector<std::string> terms; // has no prod-s
         std::map<std::string, int> nonTermsID; // to get index by name
@@ -37,12 +41,16 @@ namespace cnf_grammar {
         void create_new_startNonTerm();
         void remove_non_single_terms();
         void remove_long_rules();
+        void init_structures();
+        void find_nullable();
+        std::vector<int> add_rules(int left, const std::vector<rule_tp>& rulesToAdd);
         void remove_eps_rules();
+        void remove_unit_rules();
     public:
         void convert_to_CNF();
         friend std::ifstream &operator>>(std::ifstream &is, Grammar &grammarToLoad);
-        void print(); // TODO: make with << operator
-
+        friend std::ofstream &operator<<(std::ofstream &out,
+                                        const Grammar &grammarToPrint);
     };
 
 }
