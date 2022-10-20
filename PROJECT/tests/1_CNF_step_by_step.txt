@@ -1,0 +1,57 @@
+Creating new start non-terminal:
+<S0>=<S>;
+<S>='a'<A>'a';
+<A>='b'<T>'b';
+<A>='E';
+<T>='c''d';
+<T>='E';
+Removing terms, that are not single in production:
+<S0>=<S>;
+<S>=<T0><A><T0>;
+<A>=<T1><T><T1>;
+<A>='E';
+<T>=<T2><T3>;
+<T>='E';
+<T0>='a';
+<T1>='b';
+<T2>='c';
+<T3>='d';
+Removing long rules:
+<S0>=<S>;
+<S>=<T0><H0>;
+<A>=<T1><H1>;
+<A>='E';
+<T>=<T2><T3>;
+<T>='E';
+<T0>='a';
+<T1>='b';
+<T2>='c';
+<T3>='d';
+<H0>=<A><T0>;
+<H1>=<T><T1>;
+Removing epsilon rules:
+<S0>=<S>;
+<S>=<T0><H0>;
+<A>=<T1><H1>;
+<T>=<T2><T3>;
+<T0>='a';
+<T1>='b';
+<T2>='c';
+<T3>='d';
+<H0>=<A><T0>;
+<H0>=<T0>;
+<H1>=<T><T1>;
+<H1>=<T1>;
+Removing unit rules:
+<S0>=<T0><H0>;
+<S>=<T0><H0>;
+<A>=<T1><H1>;
+<T>=<T2><T3>;
+<T0>='a';
+<T1>='b';
+<T2>='c';
+<T3>='d';
+<H0>=<A><T0>;
+<H0>='a';
+<H1>=<T><T1>;
+<H1>='b';
