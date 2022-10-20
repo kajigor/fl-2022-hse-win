@@ -45,9 +45,8 @@ def t_newline(t):
 
 
 def t_error(t):
-    global f_outp
     global error
-    print("Illegal character '%s'" % t.value[0], file=f_outp)
+    print(f"Illegal character '%s' at line {t.lexer.lineno}" % t.value[0])
     error = True
     t.lexer.skip(len(t.value))
 
