@@ -1,5 +1,7 @@
 # Проект: симуляция CYK 
 
+[Отчет по проекту](https://github.com/simkes/fl-2022-hse-win/blob/proj/PROJECT/CYK%20simulation%20report.md)
+
 Язык грамматики:
 
 Терминалы заключаются в '  ', нетерминалы - в < >.
