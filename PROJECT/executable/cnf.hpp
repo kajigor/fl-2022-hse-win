@@ -46,8 +46,9 @@ namespace cnf_grammar {
         std::vector<int> add_rules(int left, const std::vector<rule_tp>& rulesToAdd);
         void remove_eps_rules();
         void remove_unit_rules();
+        void print(std::ofstream &out) const;
     public:
-        void convert_to_CNF();
+        void convert_to_CNF(std::ofstream &out);
         friend std::ifstream &operator>>(std::ifstream &is, Grammar &grammarToLoad);
         friend std::ofstream &operator<<(std::ofstream &out,
                                         const Grammar &grammarToPrint);

@@ -77,39 +77,7 @@ namespace cnf_grammar{
     }
 
     std::ofstream &operator<<(std::ofstream &out, const Grammar &grammarToPrint) {
-        int startID = grammarToPrint.startID;
-
-        for(int i : grammarToPrint.nonTerms[startID].productions) {
-            out << '<' << grammarToPrint.nonTerms[startID].name << ">=";
-            for (auto &[type, id]: grammarToPrint.rules[i]) {
-                if(type == ObjectType::NON_TERM) {
-                    out << '<' << grammarToPrint.nonTerms[id].name << ">";
-                } else if (type == ObjectType::EPS) {
-                    out << '\'' << "E" << "\'";
-                } else {
-                    out << '\'' << grammarToPrint.terms[id] << "\'";
-                }
-            }
-            out << ";\n";
-        }
-
-        for (int j = 0; j < grammarToPrint.nonTerms.size(); j++) {
-            if(j == startID) continue;
-            for(int i : grammarToPrint.nonTerms[j].productions) {
-                out << '<' << grammarToPrint.nonTerms[j].name << ">=";
-                for (auto &[type, id]: grammarToPrint.rules[i]) {
-                    if(type == ObjectType::NON_TERM) {
-                        out << '<' << grammarToPrint.nonTerms[id].name << ">";
-                    } else if (type == ObjectType::EPS) {
-                        out << '\'' << "E" << "\'";
-                    } else {
-                        out << '\'' << grammarToPrint.terms[id] << "\'";
-                    }
-                }
-                out << ";\n";
-            }
-        }
-
+        grammarToPrint.print(out);
         return out;
     }
 
@@ -379,16 +347,92 @@ namespace cnf_grammar{
 
     }
 
-    void Grammar::convert_to_CNF() {
+    void Grammar::convert_to_CNF(std::ofstream &out) {
+        out << "Creating new start non-terminal:\n";
         create_new_startNonTerm();
+        print(out);
+        out << "Removing terms, that are not single in production:\n";
         remove_non_single_terms();
+        print(out);
+        out << "Removing long rules:\n";
         remove_long_rules();
+        print(out);
+        out << "Removing epsilon rules:\n";
         remove_eps_rules();
+        print(out);
+        out << "Removing unit rules:\n";
         remove_unit_rules();
-//        remove_non_generating();
+        print(out);
+
     }
 
+    // reserved name - E
+    // reserved chars - < , > , '
 
+    std::set<char> reservedChars = {'<', '>', '\''};
+
+    std::string parse_name(const std::string &name, ObjectType tp) { // returns with \ if needed
+        std::string result;
+
+        if(tp == ObjectType::TERM && name == "E") {
+            return "\\E";
+        }
+
+        for(auto symb : name) {
+            if(reservedChars.count(symb)){
+                result += "\\";
+            }
+            result += symb;
+        }
+
+        return result;
+    }
+
+    void Grammar::print(std::ofstream &out) const {
+        std::string curRule;
+        std::set<std::string> rulesSet;
+
+        for(int i : nonTerms[startID].productions) {
+            curRule +=  '<' + nonTerms[startID].name + ">=";
+            for (auto &[type, id]: rules[i]) {
+                if(type == ObjectType::NON_TERM) {
+                    curRule += '<' + parse_name(nonTerms[id].name,ObjectType::NON_TERM) + ">";
+                } else if (type == ObjectType::EPS) {
+                    curRule += "\'E\'";
+                } else {
+                    curRule += '\'' + parse_name(terms[id],ObjectType::TERM) + "\'";
+                }
+            }
+            curRule += ";\n";
+            if(!rulesSet.count(curRule)) {
+                rulesSet.insert(curRule);
+                out << curRule;
+            }
+            curRule = "";
+        }
+
+        for (int j = 0; j < nonTerms.size(); j++) {
+            if(j == startID) continue;
+            for(int i : nonTerms[j].productions) {
+                curRule +=  '<' + parse_name(nonTerms[j].name,ObjectType::NON_TERM) + ">=";
+                for (auto &[type, id]: rules[i]) {
+                    if(type == ObjectType::NON_TERM) {
+                        curRule += '<' + parse_name(nonTerms[id].name,ObjectType::NON_TERM) + ">";
+                    } else if (type == ObjectType::EPS) {
+                        curRule += "\'E\'";
+                    } else {
+                        curRule += '\'' + parse_name(terms[id],ObjectType::TERM) + "\'";
+                    }
+                }
+                curRule += ";\n";
+                if(!rulesSet.count(curRule)) {
+                    rulesSet.insert(curRule);
+                    out << curRule;
+                }
+                curRule = "";
+            }
+        }
+    }
 
 
 }
