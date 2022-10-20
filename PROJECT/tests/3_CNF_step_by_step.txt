@@ -1,0 +1,33 @@
+Creating new start non-terminal:
+<S0>=<S>;
+<S>='('<S>')';
+<S>='E';
+Removing terms, that are not single in production:
+<S0>=<S>;
+<S>=<T0><S><T1>;
+<S>='E';
+<T0>='(';
+<T1>=')';
+Removing long rules:
+<S0>=<S>;
+<S>=<T0><H0>;
+<S>='E';
+<T0>='(';
+<T1>=')';
+<H0>=<S><T1>;
+Removing epsilon rules:
+<S0>=<S>;
+<S0>='E';
+<S>=<T0><H0>;
+<T0>='(';
+<T1>=')';
+<H0>=<S><T1>;
+<H0>=<T1>;
+Removing unit rules:
+<S0>='E';
+<S0>=<T0><H0>;
+<S>=<T0><H0>;
+<T0>='(';
+<T1>=')';
+<H0>=<S><T1>;
+<H0>=')';
