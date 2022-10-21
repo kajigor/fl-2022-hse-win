@@ -3,7 +3,7 @@
 [Ссылка на репозиторий с подзадачей](https://github.com/jegorpopow/EBNF/tree/parser)
 
 * Парсер написан на языке `Python` с использованием библиотеки `ply`
-* В рамках подзадачи реализован [лексер](https://github.com/jegorpopow/EBNF/blob/parser/lexer.py) и [парсер](https://github.com/jegorpopow/EBNF/blob/parser/parser.py). Оба модуля могут быть использованы отдельно в качестве консольного приложения, и могут импортироваться в другие модули.
+* В рамках подзадачи реализован [лексер](https://github.com/jegorpopow/EBNF/blob/parser/lexer.py) и [парсер](https://github.com/jegorpopow/EBNF/blob/parser/ebnf_parser.py). Оба модуля могут быть использованы отдельно в качестве консольного приложения, и могут импортироваться в другие модули.
 * Используемые структуры и некоторые вспомогательные функции можно найти [здесь](https://github.com/jegorpopow/EBNF/blob/parser/EBNF.py).
 * Консольное приложение принимает обязательный аргумент `<input.file>` -- имя файла с грамматикой -- и необязательный аргумент `<output.file>` -- имя файла для вывода. Если второй аргумент опущен, вывод производится в файл `<input.file.out>`.
     ```bash
