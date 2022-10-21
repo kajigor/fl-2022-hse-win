@@ -11,5 +11,5 @@
     ```
 * Также реализован [скрипт для тестирования](https://github.com/jegorpopow/EBNF/blob/parser/parser.py): он запускает модуль на всех тестах с расширением `.in`, чьи имена указаны в `tests/tests.txt`, и сохраняет результат в файл `tests/test_name-module_name.out`. Для запуска нужно указать имя модуля.
     ```bash
-    ./run-tests.sh parser
+    ./run-tests.sh ebnf_parser
     ```
