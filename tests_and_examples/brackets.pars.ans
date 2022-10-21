@@ -1,8 +1,0 @@
-Terminals:
-	(
-	)
-Non terminals:
-	S
-Starting non terminal: S
-Rules:
-	S → (S) | ε | SS
