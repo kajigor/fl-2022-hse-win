@@ -1,0 +1,25 @@
+Alphabet{ asdf 2234
+asdf  12asdf
+alphabet
+asdf // asdfaf
+/* // asfd 
+sadfasfd
+*/
+
+}Alphabet
+
+Alphabet{ asdf } // Alphabet at the end is optional
+
+ExtraAlphabet{ }ExtraAlphabet
+
+States{State1 State2 End }
+
+(State1 symb1 -> State2 symb2 left) 
+
+// asdfasdf
+//asdf //asdf
+
+/* asdf }
+text:w
+
+*/

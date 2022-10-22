@@ -1,0 +1,119 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "TMD-Support",
+	"patterns": [
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#charSeq"
+		},
+		{
+			"include": "#functionSeq"
+		},
+		{
+			"include": "#stateSeq"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [
+				{
+					"name": "keyword.control.move.tmd",
+					"match": "\\b(left|right|stay|States)\\b"
+				}
+			]
+		},
+		"character":{
+			"patterns": [
+				{
+					"name": "entity.name.class.tmd",
+					"match": "[a-z]([a-zA-Z0-9])*"
+				}
+			]
+		},
+		"state": {
+			"patterns": [
+				{
+					"name": "entity.name.function.tmd",
+					"match": "[A-Z]([a-zA-Z0-9])*"
+				}
+			]
+		},
+		"function": {
+			"name": "surt.function",
+			"begin": "\\(",
+			"end": "\\)",
+			"patterns": [
+				{
+					"include": "#character"
+				},
+				{
+					"include": "#state"
+				},
+				{
+					"include": "#comments"
+				},
+				{
+					"name": "keyword.operator",
+					"match": "->"
+				}
+			]
+		},
+		"charSeq": {
+			"name": "keyword.control.charSeq",
+			"begin": "((Extra)?Alphabet|Blank){",
+			"end": "}",
+			"patterns": [
+				{
+					"include": "#character"
+				},
+				{
+					"include": "#comments"
+				}
+			]
+		},
+		"stateSeq": {
+			"name": "keyword.control.stateSeq",
+			"begin": "(States|Start|Fail|Success){",
+			"end": "}",
+			"patterns": [
+				{
+					"include": "#state"
+				},
+				{
+					"include": "#comments"
+				}
+			]
+		},
+		"functionSeq": {
+			"name": "keyword.control.functionSeq",
+			"begin": "Function{",
+			"end": "}",
+			"patterns": [
+				{
+					"include": "#function"
+				},
+				{
+					"include": "#comments"
+				}
+			]
+		},
+		"comments": {
+			"name": "comment.tmd",
+			"patterns": [
+				{
+					"name": "comment.line.tmd",
+					"begin": "//",
+					"end": "\n"
+				},
+				{
+					"name": "comment.block.tmd",
+					"begin": "/\\*",
+					"end": "\\*/"
+				}
+			]
+		}
+	},
+	"scopeName": "source.tmd"
+}
