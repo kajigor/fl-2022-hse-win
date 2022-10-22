@@ -1,4 +1,4 @@
-$ python src/turing.py -f an_bn_cn.tm -i "aaabbbccc" -v -k 6
+$ python turing.py -f Tests/test_correct_language.txt -i "aaabbbccc" -v -k 6
 _____________SOLUTION______________
 State      Configuration Position   
 Qa         _|a|a|a|b|b|b|c|c|c|_   1
