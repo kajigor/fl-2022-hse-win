@@ -1,25 +1,24 @@
-Alphabet{ asdf 2234
-asdf  12asdf
-alphabet
-asdf // asdfaf
-/* // asfd 
-sadfasfd
-*/
+// Add 1 to number in binary system
 
-}Alphabet
+Alphabet{zero one}
 
-Alphabet{ asdf } // Alphabet at the end is optional
+ExtraAlphabet{blank}
 
-ExtraAlphabet{ }ExtraAlphabet
+States{S R Y N}
 
-States{State1 State2 End }
+Blank{blank}
 
-(State1 symb1 -> State2 symb2 left) 
+Start{S}
 
-// asdfasdf
-//asdf //asdf
+Fail{N}
 
-/* asdf }
-text:w
+Success{Y}
 
-*/
+Function{
+    (S zero /*such comments can be everywhere*/ -> R one stay)
+    (S one -> S zero right)
+    (S blank -> R blank left)
+    (R zero -> R zero left)
+    (R one -> R one left)
+    (R blank -> Y blank right)
+}
