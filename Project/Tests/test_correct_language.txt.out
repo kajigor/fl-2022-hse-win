@@ -1,0 +1,9 @@
+$ python src/turing.py -f an_bn_cn.tm -i "aaabbbccc" -v -k 6
+_____________SOLUTION______________
+State      Configuration Position   
+Qa         _|a|a|a|b|b|b|c|c|c|_   1
+Qb         _|A|a|a|b|b|b|c|c|c|_   2
+Qb         _|A|a|a|b|b|b|c|c|c|_   3
+Qb         _|A|a|a|b|b|b|c|c|c|_   4
+Qc         _|A|a|a|B|b|b|c|c|c|_   5
+Qc         _|A|a|a|B|b|b|c|c|c|_   6
