@@ -1,0 +1,2 @@
+$ python src/turing.py -f an_bn_cn.tm -i "aaabbbccc" -v -k 1000
+Start state is not in states set
