@@ -1,0 +1,39 @@
+6
+Qa
+Qb
+Qc
+Qprev
+Qn
+Qend
+3
+a
+b
+c
+7
+a
+b
+c
+_
+A
+B
+C
+Qf
+1
+Qend
+16
+Qa a : Qb A N
+Qa B : Qn B N
+Qb a : Qb a N
+Qb B : Qb B N
+Qb b : Qc B N
+Qc b : Qc b N
+Qc C : Qc C N
+Qc c : Qprev C P
+Qprev C : Qprev C P
+Qprev b : Qprev b P
+Qprev B : Qprev B P
+Qprev a : Qprev a P
+Qprev A : Qa A N
+Qn B : Qn B N
+Qn C : Qn C N
+Qn _ : Qend _ N
