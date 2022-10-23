@@ -1,6 +1,6 @@
 # Проект Абросимов Мацкевич
 
-Публичный репозиторий с проектом [тут](https://github.com/blonded04/fl-project).
+Публичный репозиторий с проектом [blonded04/fl-project](https://github.com/blonded04/fl-project).
 
 Абросимов занимался
 * Подсветкой синтаксиса
