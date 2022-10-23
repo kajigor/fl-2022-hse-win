@@ -25,6 +25,7 @@ import {
 import { execFileSync } from 'child_process';
 import { TIMEOUT } from 'dns';
 import { existsSync} from 'fs';
+import { dirname } from 'path';
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -145,10 +146,6 @@ function updateComplete(textDocument: TextDocument): void {
 				kind: CompletionItemKind.Text
 			},
 			{
-				label: 'JavaScript',
-				kind: CompletionItemKind.Text
-			},
-			{
 				label: 'States',
 				kind: CompletionItemKind.Text
 			},
@@ -186,10 +183,11 @@ function updateComplete(textDocument: TextDocument): void {
 			}
 		];
 
-		if (!existsSync('parser')){
+		const path = __dirname+'/../../parser/parse';
+		if (!existsSync(path)){
 			return;
 		}
-		const identefers = execFileSync('./parser', ['--identefers', '--text', textDocument.getText()]).toString('utf-8').split(' ');
+		const identefers = execFileSync(path, ['--identifiers', textDocument.getText()]).toString('utf-8').split(' ');
 
 		identefers.forEach((_s: string): void => {
 			complete.push({
@@ -207,7 +205,8 @@ documents.onDidChangeContent(change => {
 
 
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
-	if (!existsSync('parser')){
+	const path = __dirname+'/../../parser/parse';
+	if (!existsSync(path)){
 		return;
 	}
 	// In this simple example we get the settings for every validate run.
@@ -216,43 +215,32 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	// The validator creates diagnostics for all uppercase words length 2 and more
 
 	const text = textDocument.getText();
-	const lines = execFileSync('./parser', ['--warnings', '--text', textDocument.getText()]).toString('utf-8').split('\n');
+	const lines = execFileSync(path, ['--diagnostics', textDocument.getText()]).toString('utf-8').split('\n');
 
 	const diagnostics: Diagnostic[] = [];
 	for (let i = 0; i < lines.length; ++i){
-		const line = lines[i].split(' ');
-		if (line.length < 4) {
+		const d = lines[i].split('"');
+		const line = d[0].split(' ');
+		if (line.length + d.length < 5) {
 			continue;
 		}
-		const type = line[0];
-		const numLine = parseInt(line[1]);
-		const numPos = parseInt(line[2]);
-		const len = parseInt(line[3]);
-		const message = line[4].slice(1, -2);
+		const type = parseInt(line[0]);
+		const position = parseInt(line[1]);
+		const len = parseInt(line[2]);
+		const message = d[1];
 		const diagnostic : Diagnostic = 			{
 			severity: DiagnosticSeverity.Warning,
 			range: {
-				start: {line: numLine + 1, character: numPos},
-				end: {line: numLine + 1, character: numPos + len}
+				start: textDocument.positionAt(position),
+				end: textDocument.positionAt(position + len)
 			},
 			message : message,
 		};
+		if (type == 1){
+			diagnostic.severity = DiagnosticSeverity.Error;
+		}
 		diagnostics.push(diagnostic);
 	}
-
-	// 	if (hasDiagnosticRelatedInformationCapability) {
-	// 		diagnostic.relatedInformation = [
-	// 			{
-	// 				location: {
-	// 					uri: textDocument.uri,
-	// 					range: Object.assign({}, diagnostic.range)
-	// 				},
-	// 				message: diagnostic.message
-	// 			}
-	// 		];
-	// 	}
-	// 	diagnostics.push(diagnostic);
-	// }
 
 	// Send the computed diagnostics to VSCode.
 	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });

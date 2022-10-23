@@ -16,14 +16,6 @@
 		}
 	],
 	"repository": {
-		"keywords": {
-			"patterns": [
-				{
-					"name": "keyword.control.move.tmd",
-					"match": "\\b(left|right|stay|States)\\b"
-				}
-			]
-		},
 		"character":{
 			"patterns": [
 				{
@@ -45,6 +37,10 @@
 			"begin": "\\(",
 			"end": "\\)",
 			"patterns": [
+				{
+					"name": "keyword.operator.tmd",
+					"match": "\\b(left|right|stay)\\b"
+				},
 				{
 					"include": "#character"
 				},

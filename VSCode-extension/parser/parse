@@ -1,0 +1,205 @@
+#!/usr/bin/env python3
+import sys
+
+import ply.yacc as yacc
+
+from lex import tokens
+
+
+class FUN:
+    def __init__(self, new_state, writing_char, action):
+        self.new_state = new_state
+        self.writing_char = writing_char
+        self.action = action
+
+    def __str__(self):
+        return '(' + self.new_state + ' ' + self.writing_char + ' ' + self.action + ')'
+
+    def __repr__(self):
+        return '(' + self.new_state + ' ' + self.writing_char + ' ' + self.action + ')'
+
+
+char_seqs = dict()
+state_seqs = dict()
+funcs = dict()
+allChars = set()
+blankChar = ''
+startState = ''
+errorcnt = 0
+
+DISABLE_WARNINGS = False
+DISABLE_DIAGNOSTICS = False
+NICE_DIAGNOSTICS = True
+
+
+def diagnostic(level, p, message):
+    if DISABLE_DIAGNOSTICS:
+        return
+
+    start = ('Warning', 'Error')
+    if NICE_DIAGNOSTICS:
+        global errorcnt
+        errorcnt += 1
+        print(start[level] + ' at line ' + str(p.lineno) + '. ' + message + ' ' + p.value)
+    else:
+        print(str(level) + ' ' + str(p.lexpos) + ' ' + str(len(p.value)) + ' \"' + message + ' ' + p.value + '"')
+
+
+def id_redefinition_warning(p, where):
+    if DISABLE_WARNINGS:
+        return
+    if not p.value in where:
+        return
+    diagnostic(0, p, 'Redefinition of identifier:')
+
+
+def not_exists_error(p, where):
+    if DISABLE_WARNINGS:
+        return
+    if not p.value in where:
+        diagnostic(1, p, 'Identifier is not defined:')
+        return True
+    return False
+
+
+def p_finish(p):
+    '''finish : newSeq'''
+    p[0] = p[1]
+
+
+def p_char_seq(p):
+    '''char_seq : CHAR_SEQ_BEGIN
+                | newSeq CHAR_SEQ_BEGIN
+                | char_seq CHARACTER
+                | char_seq error
+    '''
+    if len(p) == 2:
+        p[0] = p[1][0:-1]
+        char_seqs[p[0]] = set()
+    elif p[1] == '}':
+        p[0] = p[2][0:-1]
+        char_seqs[p[0]] = set()
+    else:
+        p[0] = p[1]
+        if not type(p[2]) is str:
+            return
+
+        id_redefinition_warning(p.slice[2], char_seqs[p[0]])
+
+        char_seqs[p[0]].add(p[2])
+        allChars.add(p[2])
+
+
+def p_state_seq(p):
+    '''state_seq : STATE_SEQ_BEGIN
+                | newSeq STATE_SEQ_BEGIN
+                | state_seq STATE
+                | state_seq error
+    '''
+
+    if len(p) == 2:
+        p[0] = p[1][0:-1]
+        state_seqs[p[0]] = set()
+    elif p[1] == '}':
+        p[0] = p[2][0:-1]
+        state_seqs[p[0]] = set()
+    else:
+        p[0] = p[1]
+        if type(p[2]) is str:
+            if p[0] != 'States' and not_exists_error(p.slice[2], state_seqs['States']):
+                return
+
+            id_redefinition_warning(p.slice[2], state_seqs[p[0]])
+            state_seqs[p[0]].add(p[2])
+            funcs[p[2]] = dict()
+
+
+def p_function_seq(p):
+    '''function_seq : newSeq FUNCTION_SEQ_BEGIN
+                | function_seq function
+                | function_seq error
+    '''
+
+    if len(p) == 2:
+        p[0] = p[1][0:-1]
+    elif p[1] == '}':
+        p[0] = p[2][0:-1]
+    else:
+        p[0] = p[1]
+        if type(p[2]) is tuple:
+            funcs[p[2][0]][p[2][1]] = p[2][2]
+
+
+def p_function(p):
+    '''function : FUNCTION_BEGIN STATE CHARACTER FUNCTION_ARROW STATE CHARACTER CONTROL_COMMAND FUNCTION_END'''
+    error = not_exists_error(p.slice[2], state_seqs['States']) or not_exists_error(p.slice[3], allChars)
+    error |= not_exists_error(p.slice[5], state_seqs['States']) or not_exists_error(p.slice[6], allChars)
+    if error:
+        return
+    p[0] = (p[2], p[3], FUN(p[5], p[6], p[7]))
+
+
+def p_blank(p):
+    '''blank : newSeq BLANK_CHAR CHARACTER'''
+    if not_exists_error(p.slice[3], char_seqs['ExtraAlphabet']):
+        return
+
+    global blankChar
+    blankChar = p[3]
+    p[0] = p[3]
+
+
+def p_start(p):
+    '''start : newSeq START STATE'''
+    if not_exists_error(p.slice[3], state_seqs['States']):
+        return
+
+    global startState
+    startState = p[3]
+    p[0] = p[3]
+
+
+def p_newSeq(p):
+    '''newSeq : char_seq CLOSE
+              | state_seq CLOSE
+              | blank CLOSE
+              | function_seq CLOSE
+              | start CLOSE
+              | newSeq error
+    '''
+    p[0] = '}'
+
+
+def p_error(p):
+    if p == None:
+        token = "end of file"
+        parser.errok()
+        return
+    diagnostic(1, p, 'Unexpected token:')
+
+
+parser = yacc.yacc()
+
+
+def parse_grammar(text):
+    parser.parse(text)
+
+
+def main():
+    global NICE_DIAGNOSTICS, DISABLE_DIAGNOSTICS
+    args = sys.argv
+    if len(args) == 3:
+        if args[1] == '--identifiers':
+            DISABLE_DIAGNOSTICS = True
+            parse_grammar(args[2])
+            print(*allChars, end=' ')
+            print(*state_seqs['States'])
+        elif args[1] == '--diagnostics':
+            NICE_DIAGNOSTICS = False
+            parse_grammar(args[2])
+    elif len(args) == 2:
+        parse_grammar(open(args[1], 'r').read())
+
+
+if __name__ == "__main__":
+    main()
