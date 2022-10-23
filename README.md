@@ -9,7 +9,7 @@
 
 #### Подзадача 2(поддержка в IDE)
 
-[Описание + инструкция по запуску](https://github.com/ilma4/fl-2022-hse-win/blob/d4bbc42724f974b833e301db2f3f72a46299e6ea/VSCode-extension/README.md)
+[Описание + инструкция по запуску](https://github.com/ilma4/fl-2022-hse-win/blob/dff493331012080932e3d6dc55d5fbaa034fd936/VSCode-extension/README.md)
 
 ### Борис Михайлов
 
