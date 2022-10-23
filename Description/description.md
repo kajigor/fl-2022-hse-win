@@ -60,6 +60,8 @@
 
 ## Примеры
 
+Примеры находятся в директории `Description/examples`
+
 ```
 // Add 1 to number in binary system
 
