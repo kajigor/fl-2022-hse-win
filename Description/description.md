@@ -86,6 +86,8 @@
 
 Примеры находятся в директории `Description/examples`
 
+`incr.tmd`
+
 ```
 // Add 1 to number in binary system
 
@@ -110,5 +112,76 @@ Function{
     (R zero -> R zero left)
     (R one -> R one left)
     (R blank -> Y blank right)
+}
+```
+
+`comments.tmd`
+
+```
+// machiene does nothing, just comments demo
+
+States{ // can be defined before Alphabet
+Alphabet // correct  
+Function // correct
+S Y N
+Y1 Y2 N1 N2
+S // correct, but analyzer warns
+}
+
+Start{S /*F*/} // error if uncomment F
+/* Blank{} */ // error if uncomment
+
+Alphabet{
+    c
+    a b
+    c // correct, but warn
+    char1 /* another comment */ char2
+}
+
+ExtraAlphabet{e1 e2 blank}
+
+Blank{blank}
+
+Start{S}
+Fail{N N1 N2}
+Success{Y Y1 Y2 S}
+Function{
+    (/* ok */ S /*ok*/ c /*ok*/ -> /*ok*/ S /* ok */ c /* ok */ stay /* ok */) 
+} // Function
+```
+
+`palindrom.tmd`
+```
+//check if binary word is a palindrom
+
+Alphabet{one zero}
+ExtraAlphabet{blank}
+Blank{blank}
+States{S F0 F1 B0 B1 R Y N}
+Start{S}
+Success{Y}
+Fail{N}
+Function{
+    (S zero -> F0 blank right)
+    (F0 zero -> F0 zero right)
+    (F1 zero -> F1 zero right)
+    (B0 zero -> R blank left)
+    (B1 zero -> N zero stay)
+    (R zero -> R zero left)
+
+    (S one -> F1 blank right)
+    (F0 one -> F0 one right)
+    (F1 one -> F1 one right)
+    (B0 one -> N one stay)
+    (B1 one -> R blank left)
+    (R one -> R one left)
+
+    (S blank -> Y blank stay)
+    (F0 blank -> B0 blank left)
+    (F1 blank -> B1 blank left)
+    (B0 blank -> Y blank stay)
+    (B1 blank -> Y blank stay)
+    (R blank -> S blank right)
+    // Note, that there are no (Y char -> ...) or (N char -> ...) 
 }
 ```
