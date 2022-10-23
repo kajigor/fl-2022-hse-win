@@ -17,7 +17,7 @@
 
 * Выполните в терминале
 ```
-git clone https://github.com/ilma4/fl-2022-hse-win/tree/proj
+git clone https://github.com/ilma4/fl-2022-hse-win.git
 cd fl-2022-hse-win
 git switch proj
 cd VSCode-extension
