@@ -29,7 +29,7 @@ def t_LINE_COMMENT(t):
     global ignoreComments
     if ignoreComments:
         return
-    return t
+    # return t
 
 
 def t_BLOCK_COMMENT(t):
@@ -38,7 +38,7 @@ def t_BLOCK_COMMENT(t):
     t.lexer.lineno += t.value.count('\n')
     if ignoreComments:
         return
-    return t
+    # return t
 
 
 def t_CONTROL_COMMAND(t):

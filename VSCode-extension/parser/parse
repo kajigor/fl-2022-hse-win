@@ -20,7 +20,7 @@ class FUN:
 
 
 char_seqs = dict()
-state_seqs = dict()
+state_seqs = {'States' : set()}
 funcs = dict()
 allChars = set()
 blankChar = ''
@@ -63,8 +63,9 @@ def not_exists_error(p, where):
 
 
 def p_finish(p):
-    '''finish : newSeq'''
-    p[0] = p[1]
+    '''finish : newSeq
+              | '''
+    p[0] = '}'
 
 
 def p_char_seq(p):

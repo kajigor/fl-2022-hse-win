@@ -146,6 +146,10 @@ function updateComplete(textDocument: TextDocument): void {
 				kind: CompletionItemKind.Text
 			},
 			{
+				label: 'ExtraAlphabet',
+				kind: CompletionItemKind.Text
+			},
+			{
 				label: 'States',
 				kind: CompletionItemKind.Text
 			},
