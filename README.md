@@ -4,7 +4,7 @@
 
 #### Подзадача 1(описание синтаксиса)
 
-[Описание](https://github.com/ilma4/fl-2022-hse-win/blob/85ee79bfa7aa794093a8373cef35ccac47dc4b62/Description/description.md )
+[Описание](https://github.com/ilma4/fl-2022-hse-win/blob/67821c966dab0677f52675cecfe093e6fdf69865/Description/description.md)
 
 
 #### Подзадача 2(поддержка в IDE)
