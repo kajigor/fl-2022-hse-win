@@ -57,3 +57,32 @@
 Отвергающие состояния - последовательность состояний, перед которой стоит ключевое слово `Fail`. Состояния также должны входить в States.
 
 Аналогично отвергающим описываются допускающие состояния (вместо ключевого слова `Fail` слово `Success`).
+
+## Примеры
+
+```
+// Add 1 to number in binary system
+
+Alphabet{zero one}
+
+ExtraAlphabet{blank}
+
+States{S R Y N}
+
+Blank{blank}
+
+Start{S}
+
+Fail{N}
+
+Success{Y}
+
+Function{
+    (S zero /*such comments can be everywhere*/ -> R one stay)
+    (S one -> S zero right)
+    (S blank -> R blank left)
+    (R zero -> R zero left)
+    (R one -> R one left)
+    (R blank -> Y blank right)
+}
+```
