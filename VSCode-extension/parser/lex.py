@@ -33,7 +33,7 @@ def t_LINE_COMMENT(t):
 
 
 def t_BLOCK_COMMENT(t):
-    r'/\*(.|\n)*\*/'
+    r'/\*(.|\n)*?\*/'
     global ignoreComments
     t.lexer.lineno += t.value.count('\n')
     if ignoreComments:
