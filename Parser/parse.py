@@ -110,6 +110,7 @@ def p_error(p):
         return
     else:
         print('Unexpected token ' + p.value + ' at ' + str(p.lineno) + ':' + str(p.lexpos - p.lexer.linepos + 1))
+        exit(0)
 
 
 parser = yacc.yacc()
