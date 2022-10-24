@@ -124,7 +124,7 @@ def main():
     args = sys.argv
     out = parse_grammar(open(args[1], 'r').read())
 
- #   out.run(args[2:])
+    out.run(args[2:])
 
 
 if __name__ == "__main__":
