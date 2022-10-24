@@ -108,7 +108,8 @@ def p_error(p):
         token = "end of file"
         parser.errok()
         return
-    print(p)
+    else:
+        print('Unexpected token ' + p.value + ' at ' + str(p.lineno) + ':' + str(p.lexpos - p.lexer.linepos + 1))
 
 
 parser = yacc.yacc()
@@ -123,7 +124,7 @@ def main():
     args = sys.argv
     out = parse_grammar(open(args[1], 'r').read())
 
-    out.run(args[2:])
+ #   out.run(args[2:])
 
 
 if __name__ == "__main__":
