@@ -1,0 +1,2 @@
+Final state Y: Success
+zero one one one zero one
