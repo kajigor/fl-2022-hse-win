@@ -36,7 +36,7 @@ def t_LINE_COMMENT(t):
 
 
 def t_BLOCK_COMMENT(t):
-    r'/\*(.|\n)*\*/'
+    r'/\*([^\*]|\*[^/])*\*/'
     global ignoreComments
     t.lexer.lineno += t.value.count('\n')
     if ignoreComments:
@@ -125,7 +125,7 @@ def t_FUNCTION_ARROW(t):
 
 
 def t_CHAR_NAME(t):
-    r'[a-z0-9][a-zA-Z0-9]*'
+    r'[a-z][a-zA-Z0-9]*'
     return t
 
 
@@ -140,6 +140,7 @@ t_ignore = ' \t'
 def t_newline(t):
     r'\n'
     t.lexer.lineno += 1
+    t.lexer.linepos = t.lexer.lexpos
 
 
 def t_error(t):
@@ -157,7 +158,7 @@ lexer = lex.lex()
 
 
 def main():
-      filename = input()
+      filename = 'input.txt'
       output = open(filename + '.out', 'w+')
       data = open(filename).read()
       #data = s
