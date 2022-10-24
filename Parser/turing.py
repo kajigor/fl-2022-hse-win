@@ -1,6 +1,5 @@
 import collections
 
-
 class State:
     def __init__(self, state):
         self.state = state.value
@@ -75,6 +74,8 @@ class TuringMachine:
                 exit(1)
             dq.append(value)
         state = self.start
+        if len(values) == 0:
+            dq.append(self.blank)
         while not state.final():
             ch = dq[pos]
             if ch not in state.transfers:
