@@ -124,8 +124,10 @@ def main():
     global NICE_DIAGNOSTICS, DISABLE_DIAGNOSTICS
     args = sys.argv
     out = parse_grammar(open(args[1], 'r').read())
-
-    out.run(args[2:])
+    if len(args) < 2:
+        out.run([])
+    else:
+        out.run(args[2:])
 
 
 if __name__ == "__main__":
