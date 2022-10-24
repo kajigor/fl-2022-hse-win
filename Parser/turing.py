@@ -64,7 +64,7 @@ class TuringMachine:
             print('Undefined state ' + position(state))
             exit(1)
 
-    def run(self, values):
+    def run(self, values, verbous):
         pos = 0
         pos0 = 0
         dq = collections.deque()
@@ -76,6 +76,11 @@ class TuringMachine:
         state = self.start
         if len(values) == 0:
             dq.append(self.blank)
+        step = 0
+        if verbous:
+            data = collections.deque(dq)
+            data[pos] = '(' + data[pos] + ')'
+            print('Step ' + str(step) + ': ' + state.state + ' : ' + ' '.join(data))
         while not state.final():
             ch = dq[pos]
             if ch not in state.transfers:
@@ -91,6 +96,12 @@ class TuringMachine:
                 pos0 += 1
             if pos == len(dq):
                 dq.append(self.blank)
+            step += 1
+            if verbous:
+                data = collections.deque(dq)
+                data[pos] = '(' + data[pos] + ')'
+                print('Step ' + str(step) + ': ' + state.state + ' : ' + ' '.join(data))
+
         while len(dq) > 0 and dq[0] == self.blank:
             dq.popleft()
             pos0 -= 1
