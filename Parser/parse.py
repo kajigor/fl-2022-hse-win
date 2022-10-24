@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 import sys
 
 import ply.yacc as yacc
@@ -121,13 +122,18 @@ def parse_grammar(text):
 
 
 def main():
+    argument_parser = argparse.ArgumentParser(prog='parse',
+                                        description='Parse Turing state machine')
+    argument_parser.add_argument('-v', '--verbous', action='store_true', required = False)
+    argument_parser.add_argument('input')
+    argument_parser.add_argument('args', nargs = argparse.REMAINDER)
+    args = argument_parser.parse_args()
+
+
+
     global NICE_DIAGNOSTICS, DISABLE_DIAGNOSTICS
-    args = sys.argv
-    out = parse_grammar(open(args[1], 'r').read())
-    if len(args) < 2:
-        out.run([])
-    else:
-        out.run(args[2:])
+    out = parse_grammar(open(args.input, 'r').read())
+    out.run(args.args, args.verbous)
 
 
 if __name__ == "__main__":
