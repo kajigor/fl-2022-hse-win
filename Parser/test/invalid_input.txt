@@ -1,0 +1,30 @@
+// machiene does nothing, just comments demo
+
+States{ // can be defined before Alphabet
+Alphabet // correct
+Function // correct
+S Y N
+Y1 Y2 N1 N2
+S // correct, but analyzer warns
+}
+
+Start{S /*F*/} // error if uncomment F
+/* Blank{} */ // error if uncomment
+
+Alphabet{
+    c
+    a b
+    c // correct, but warn
+    char1 /* another comment */ char2
+}
+
+ExtraAlphabet{e1 e2 blank}
+
+Blank{blank}
+
+Start{S}
+Fail{N N1 N2}
+Success{Y Y1 Y2 S}
+Function{
+    (/* ok */ S /*ok*/ c /*ok*/ -> /*ok*/ S /* ok */ c /* ok */ stay /* ok */)
+} // Function
